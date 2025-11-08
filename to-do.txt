@@ -1,0 +1,17 @@
+Publishing Pipeline Recovery
+
+Context
+EssentiallySports’s article publishing pipeline sometimes fails (network issues, validation service crashes, DB outages etc.). Editors need a way to rapidly diagnose the disruption and restore publishing, with minimal engineering involvement.
+
+What you need to do
+
+Build a backend module/class that monitors publishing pipeline health.
+If the pipeline goes down, log the failure and trigger an alert.
+Provide an endpoint to show pipeline status and suggested recovery action.
+Implement a method to auto-recover the pipeline if possible; log recovery attempts and outcome.
+If recovery fails, produce a clear editor-facing message with next steps.
+Submit:
+Source code.
+Audit log samples: failure detected, recovery succeeded, recovery failed etc.
+Test suite for each scenario.
+Brief README: run instructions, how to interpret logs.

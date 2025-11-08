@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publishing Pipeline Monitor - Smart System Doctor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .section:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* Big Picture Cards */
+        .big-picture {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* How It Works Timeline */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            margin-bottom: 50px;
+            position: relative;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-left: 50px;
+            width: calc(50% - 40px);
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: auto;
+            margin-right: 50px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+
+        .timeline-item:nth-child(even)::before {
+            left: auto;
+            right: -20px;
+        }
+
+        .timeline-item h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        /* Code Structure */
+        .code-structure {
+            font-family: 'JetBrains Mono', monospace;
+            background: #2d3748;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 30px;
+            overflow-x: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .code-structure .folder {
+            color: #63b3ed;
+        }
+
+        .code-structure .comment {
+            color: #68d391;
+            font-style: italic;
+        }
+
+        /* Real World Example */
+        .example-scenario {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .example-scenario h4 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .timeline-steps {
+            display: grid;
+            gap: 15px;
+        }
+
+        .step {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .step time {
+            color: #ffd700;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        /* Benefits Grid */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit-item {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .benefit-item i {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .benefit-item h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        /* Usage Section */
+        .usage-commands {
+            display: grid;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .command {
+            background: #2d3748;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            border-left: 4px solid #667eea;
+        }
+
+        .command strong {
+            color: #63b3ed;
+        }
+
+        /* Smart Features */
+        .smart-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .smart-feature {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left: 4px solid #ffd700;
+        }
+
+        .smart-feature i {
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-icons {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section h2 {
+                font-size: 2rem;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: calc(100% - 60px);
+                margin-left: 60px;
+            }
+
+            .timeline-item:nth-child(even) {
+                margin-left: 60px;
+                margin-right: 0;
+            }
+
+            .timeline-item::before {
+                left: -40px;
+            }
+
+            .timeline-item:nth-child(even)::before {
+                left: -40px;
+                right: auto;
+            }
+
+            .big-picture {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .smart-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 50px 0;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 50px 0;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .timeline-item {
+                padding: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-icon">
+                <i class="fas fa-stethoscope"></i>
+            </div>
+            <h1>Publishing Pipeline Monitor</h1>
+            <p>Think of it like a smart "doctor" for your company's article publishing system</p>
+        </div>
+    </section>
+
+    <!-- What It Does Section -->
+    <section class="section">
+        <div class="container">
+            <h2>What This System Does (The Big Picture)</h2>
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 50px; color: #666;">
+                Imagine your company publishes articles online. There are 3 main "parts" that need to work together:
+            </p>
+
+            <div class="big-picture">
+                <div class="card">
+                    <i class="fas fa-globe card-icon"></i>
+                    <h3>Network</h3>
+                    <p>Internet connection to send articles</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-check-circle card-icon"></i>
+                    <h3>Validation Service</h3>
+                    <p>Checks if articles are good before publishing</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-database card-icon"></i>
+                    <h3>Database</h3>
+                    <p>Stores the articles</p>
+                </div>
+            </div>
+
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <i class="fas fa-shield-alt card-icon"></i>
+                <h3>24/7 Monitoring</h3>
+                <p>This system <strong>watches these 3 parts 24/7</strong>, like a security guard. When something breaks, it:</p>
+                <ul style="color: #666; margin-top: 15px;">
+                    <li>📢 <strong>Tells people</strong> about the problem (sends alerts)</li>
+                    <li>🔧 <strong>Tries to fix it automatically</strong></li>
+                    <li>📝 <strong>Writes down everything</strong> that happened (for later review)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section">
+        <div class="container">
+            <h2>How It Works (Step by Step)</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>1. The "Check-Up" Process</h4>
+                    <p><strong>Every 30 seconds</strong>, the system does a "health check":</p>
+                    <ul style="margin-top: 10px;">
+                        <li>🌐 Tests if the internet connection works</li>
+                        <li>🤖 Asks the validation service "Are you OK?"</li>
+                        <li>💾 Tries to connect to the database</li>
+                    </ul>
+                    <p style="margin-top: 10px;">
+                        <strong>If everything is working</strong> → It says "All good!" and waits 30 seconds.<br>
+                        <strong>If something is broken</strong> → It starts the "fix it" process.
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>2. When Something Breaks (The Alert System)</h4>
+                    <p><strong>Example:</strong> Database stops working.</p>
+                    <p>The system:</p>
+                    <ul style="margin-top: 10px;">
+                        <li>📝 <strong>Logs the problem:</strong> "Database is down at 3:15 PM"</li>
+                        <li>📧 <strong>Sends alerts:</strong></li>
+                        <ul>
+                            <li>Email to IT team: "Database broken!"</li>
+                            <li>Slack message to engineers: "🚨 Database down - fix needed!"</li>
+                            <li>Can also send to other systems via webhooks</li>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>3. Auto-Fix Attempts (The Recovery System)</h4>
+                    <p>The system tries to fix problems automatically:</p>
+
+                    <div style="display: grid; gap: 15px; margin-top: 15px;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                            <strong>🔧 For Network Problems:</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>Clears the DNS cache (like restarting your internet connection)</li>
+                                <li>If that doesn't work, tells humans what to do</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                            <strong>🔄 For Validation Service Problems:</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>Calls a special "restart" API on the service</li>
+                                <li>If that fails, tells humans to restart the service</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                            <strong>💾 For Database Problems:</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>Disconnects and reconnects to the database</li>
+                                <li>If that fails, tells humans to check the database server</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>4. The Brain (The Main Controller)</h4>
+                    <p>There's a main "brain" called <strong>PublishingPipelineMonitor</strong> that:</p>
+                    <ul style="margin-top: 10px;">
+                        <li>🎯 <strong>Coordinates everything</strong> - tells each part what to do</li>
+                        <li>🧠 <strong>Remembers past problems</strong> - "This database failed 3 times today"</li>
+                        <li>⚡ <strong>Makes decisions</strong> - "This is urgent, send critical alert"</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Structure Section -->
+    <section class="section">
+        <div class="container">
+            <h2>The Code Structure (Like a Well-Organized Toolbox)</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: #666;">
+                The code is organized like a toolbox with different tools for different jobs:
+            </p>
+
+            <div class="code-structure">
+📁 src/<br>
+├── 📁 core/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">The main "brain" (PublishingPipelineMonitor)</span><br>
+├── 📁 services/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Special tools for specific jobs</span><br>
+│ &nbsp;&nbsp; ├── healthChecker.js &nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Tests if things are working</span><br>
+│ &nbsp;&nbsp; ├── recoveryService.js &nbsp;&nbsp;# <span class="comment">Fixes broken things</span><br>
+│ &nbsp;&nbsp; └── alertService.js &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Sends notifications</span><br>
+├── 📁 api/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">The "control panel" (web server)</span><br>
+├── 📁 utils/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Helper tools (logging, etc.)</span><br>
+└── 📁 types/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Definitions (what things should look like)</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real World Example Section -->
+    <section class="section">
+        <div class="container">
+            <h2>Real-World Example</h2>
+
+            <div class="example-scenario">
+                <h4>🚨 Scenario: Your validation service crashes at 2:00 PM.</h4>
+
+                <div class="timeline-steps">
+                    <div class="step">
+                        <time>2:00:00</time> System checks validation service → "Not responding!"
+                    </div>
+                    <div class="step">
+                        <time>2:00:01</time> Sends alerts to team
+                    </div>
+                    <div class="step">
+                        <time>2:00:02</time> Tries to restart validation service automatically
+                    </div>
+                    <div class="step">
+                        <time>2:00:03</time> Service restarts successfully! Logs "Recovery took 1 second"
+                    </div>
+                    <div class="step">
+                        <time>2:00:30</time> Next check confirms everything works
+                    </div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <strong style="color: #ffd700;">✨ Result:</strong> Problem fixed in 3 seconds, team notified, everything logged.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Benefits Section -->
+    <section class="section">
+        <div class="container">
+            <h2>Key Benefits</h2>
+
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <i class="fas fa-bolt"></i>
+                    <h4>Fast Response</h4>
+                    <p>Catches problems in seconds, not hours</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-magic"></i>
+                    <h4>Auto-Healing</h4>
+                    <p>Fixes many problems without human help</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-file-alt"></i>
+                    <h4>Clear Records</h4>
+                    <p>Everything logged for later analysis</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                    <h4>Scalable</h4>
+                    <p>Can monitor many systems at once</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-cogs"></i>
+                    <h4>Flexible</h4>
+                    <p>Easy to add new checks or alerts</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Use It Section -->
+    <section class="section">
+        <div class="container">
+            <h2>How to Use It</h2>
+
+            <div class="usage-commands">
+                <div class="command">
+                    <strong>npm start</strong> - Start it
+                </div>
+                <div class="command">
+                    <strong>Visit http://localhost:3000/api/v1/pipeline/status</strong> - Check status
+                </div>
+                <div class="command">
+                    <strong>POST /api/v1/pipeline/recovery/database</strong> - Manual fix
+                </div>
+                <div class="command">
+                    <strong>Check logs/audit.log</strong> - Read logs for what happened
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Smart Features Section -->
+    <section class="section">
+        <div class="container">
+            <h2>The "Smart" Parts</h2>
+
+            <div class="smart-features">
+                <div class="smart-feature">
+                    <i class="fas fa-brain"></i>
+                    <h4>It learns from failures</h4>
+                    <p>If something fails repeatedly, it sends more urgent alerts</p>
+                </div>
+                <div class="smart-feature">
+                    <i class="fas fa-clock"></i>
+                    <h4>It times out</h4>
+                    <p>Won't wait forever for slow responses</p>
+                </div>
+                <div class="smart-feature">
+                    <i class="fas fa-redo"></i>
+                    <h4>It retries</h4>
+                    <p>Tries multiple ways to fix problems</p>
+                </div>
+                <div class="smart-feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>It's safe</h4>
+                    <p>Won't break working things while fixing broken ones</p>
+                </div>
+                <div class="smart-feature">
+                    <i class="fas fa-list-check"></i>
+                    <h4>It tells you what to do</h4>
+                    <p>When auto-fix fails, gives clear instructions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-icons">
+                <i class="fas fa-tools"></i> <i class="fas fa-magic"></i> <i class="fas fa-shield-alt"></i>
+            </div>
+            <h2>This system turns reactive "fix when broken" into proactive "prevent and auto-fix" monitoring!</h2>
+            <p>Transform your publishing pipeline with intelligent monitoring and automatic recovery.</p>
+        </div>
+    </section>
+</body>
+</html>

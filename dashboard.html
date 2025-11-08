@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Publishing Pipeline Monitor - Live Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .component-icon {
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .network { background: linear-gradient(45deg, #667eea, #764ba2); }
+        .validation-service { background: linear-gradient(45deg, #f093fb, #f5576c); }
+        .database { background: linear-gradient(45deg, #4facfe, #00f2fe); }
+
+        .status-indicator {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .status-healthy {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-unhealthy {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .card-content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 500;
+            color: #666;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .error-message {
+            background: #fff5f5;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            color: #721c24;
+        }
+
+        /* Overall Status Card */
+        .overall-status {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .overall-status .card-content {
+            padding: 20px;
+        }
+
+        .overall-status h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .overall-status .status-indicator {
+            font-size: 1.1rem;
+            padding: 12px 24px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* Recovery Suggestions */
+        .recovery-card {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-left: 4px solid #f39c12;
+        }
+
+        .recovery-card h4 {
+            color: #8b4513;
+            margin-bottom: 15px;
+        }
+
+        .recovery-steps {
+            background: rgba(255,255,255,0.8);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .recovery-steps ol {
+            padding-left: 20px;
+        }
+
+        .recovery-steps li {
+            margin-bottom: 5px;
+            color: #8b4513;
+        }
+
+        /* Controls */
+        .controls {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-left: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 Publishing Pipeline Monitor</h1>
+            <p>Live Dashboard - Real-time System Health Monitoring</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-primary" onclick="refreshStatus()">
+                <i class="fas fa-sync-alt"></i> Refresh Status
+            </button>
+            <button class="btn btn-secondary" onclick="openLogs()">
+                <i class="fas fa-file-alt"></i> View Logs
+            </button>
+            <button class="btn btn-secondary" onclick="openAPI()">
+                <i class="fas fa-code"></i> API Docs
+            </button>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboard-content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading pipeline status...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api/v1';
+
+        async function fetchStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/pipeline/status`);
+                const data = await response.json();
+                return data.data;
+            } catch (error) {
+                console.error('Failed to fetch status:', error);
+                return null;
+            }
+        }
+
+        function createStatusCard(component) {
+            const isHealthy = component.isHealthy;
+            const statusClass = isHealthy ? 'status-healthy' : 'status-unhealthy';
+            const statusIcon = isHealthy ? '✅' : '❌';
+            const statusText = isHealthy ? 'Healthy' : 'Unhealthy';
+
+            let iconClass = '';
+            switch(component.component) {
+                case 'network':
+                    iconClass = 'network';
+                    break;
+                case 'validation-service':
+                    iconClass = 'validation-service';
+                    break;
+                case 'database':
+                    iconClass = 'database';
+                    break;
+            }
+
+            return `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="component-icon ${iconClass}">
+                            <i class="fas fa-${getComponentIcon(component.component)}"></i>
+                        </div>
+                        <div class="status-indicator ${statusClass}">
+                            ${statusIcon} ${statusText}
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>${formatComponentName(component.component)}</h3>
+                        <div class="metric">
+                            <span class="metric-label">Status</span>
+                            <span class="metric-value">${component.status}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Response Time</span>
+                            <span class="metric-value">${component.responseTime}ms</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Last Check</span>
+                            <span class="metric-value">${new Date(component.timestamp).toLocaleTimeString()}</span>
+                        </div>
+                        ${component.error ? `
+                            <div class="error-message">
+                                <strong>Error:</strong> ${component.error}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function createOverallStatusCard(status) {
+            const isHealthy = status.isHealthy;
+            const statusClass = isHealthy ? 'status-healthy' : 'status-unhealthy';
+            const statusIcon = isHealthy ? '✅' : '❌';
+            const statusText = isHealthy ? 'All Systems Operational' : `${status.failedComponents.length} Component(s) Unhealthy`;
+
+            return `
+                <div class="card overall-status">
+                    <div class="card-content">
+                        <h2>${statusIcon} ${statusText}</h2>
+                        <div class="status-indicator ${statusClass}">
+                            ${status.status}
+                        </div>
+                        <p style="margin-top: 15px; opacity: 0.9;">
+                            Last updated: ${new Date(status.lastChecked).toLocaleString()}
+                        </p>
+                        <div style="margin-top: 20px;">
+                            <strong>Monitoring:</strong> ${status.monitoring.isActive ? 'Active' : 'Inactive'} |
+                            <strong>Auto-Recovery:</strong> ${status.monitoring.autoRecovery ? 'Enabled' : 'Disabled'} |
+                            <strong>Check Interval:</strong> ${status.monitoring.checkInterval / 1000}s
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createRecoveryCard(suggestion) {
+            if (!suggestion) return '';
+
+            return `
+                <div class="card recovery-card">
+                    <div class="card-header">
+                        <div class="component-icon" style="background: linear-gradient(45deg, #f39c12, #e67e22);">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="status-indicator" style="background: #f39c12; color: white;">
+                            <i class="fas fa-exclamation-triangle"></i> Recovery Needed
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h4>${formatComponentName(suggestion.component)} Recovery Required</h4>
+                        <p><strong>Priority:</strong> ${suggestion.priority.toUpperCase()}</p>
+                        <p><strong>Action:</strong> ${suggestion.suggestion}</p>
+                        <div class="recovery-steps">
+                            <strong>Next Steps:</strong>
+                            <ol>
+                                ${suggestion.nextSteps.map(step => `<li>${step}</li>`).join('')}
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getComponentIcon(component) {
+            switch(component) {
+                case 'network': return 'globe';
+                case 'validation-service': return 'check-circle';
+                case 'database': return 'database';
+                default: return 'server';
+            }
+        }
+
+        function formatComponentName(component) {
+            return component.split('-').map(word =>
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+
+        async function refreshStatus() {
+            const dashboard = document.getElementById('dashboard-content');
+
+            // Show loading
+            dashboard.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Refreshing pipeline status...</p>
+                </div>
+            `;
+
+            const status = await fetchStatus();
+
+            if (!status) {
+                dashboard.innerHTML = `
+                    <div class="card" style="grid-column: 1 / -1; text-align: center; background: #fee; border-left: 4px solid #e74c3c;">
+                        <h3 style="color: #e74c3c;">❌ Connection Failed</h3>
+                        <p>Cannot connect to the Pipeline Monitor server. Please ensure it's running.</p>
+                        <button class="btn btn-primary" onclick="refreshStatus()" style="margin-top: 15px;">
+                            <i class="fas fa-redo"></i> Try Again
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Create dashboard HTML
+            const html = `
+                ${createOverallStatusCard(status)}
+                ${status.checks.map(createStatusCard).join('')}
+                ${createRecoveryCard(status.recoverySuggestion)}
+            `;
+
+            dashboard.innerHTML = `<div class="dashboard">${html}</div>`;
+        }
+
+        function openLogs() {
+            window.open('logs/pipeline.log', '_blank');
+        }
+
+        function openAPI() {
+            window.open('pipeline-monitor.html', '_blank');
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(refreshStatus, 30000);
+
+        // Initial load
+        window.onload = refreshStatus;
+    </script>
+</body>
+</html>

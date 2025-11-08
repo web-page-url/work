@@ -1,0 +1,72 @@
+I'll explain the Publishing Pipeline Monitor system in simple, easy words. Think of it like a smart "doctor" for your company's article publishing system.
+What This System Does (The Big Picture)
+Imagine your company publishes articles online. There are 3 main "parts" that need to work together:
+Network - Internet connection to send articles
+Validation Service - Checks if articles are good before publishing
+Database - Stores the articles
+This system watches these 3 parts 24/7, like a security guard. When something breaks, it:
+Tells people about the problem (sends alerts)
+Tries to fix it automatically
+Writes down everything that happened (for later review)
+How It Works (Step by Step)
+1. The "Check-Up" Process
+Every 30 seconds, the system does a "health check":
+Tests if the internet connection works
+Asks the validation service "Are you OK?"
+Tries to connect to the database
+If everything is working → It says "All good!" and waits 30 seconds.
+If something is broken → It starts the "fix it" process.
+2. When Something Breaks (The Alert System)
+Example: Database stops working.
+The system:
+Logs the problem: "Database is down at 3:15 PM"
+Sends alerts:
+Email to IT team: "Database broken!"
+Slack message to engineers: "🚨 Database down - fix needed!"
+Can also send to other systems via webhooks
+3. Auto-Fix Attempts (The Recovery System)
+The system tries to fix problems automatically:
+For Network Problems:
+Clears the DNS cache (like restarting your internet connection)
+If that doesn't work, tells humans what to do
+For Validation Service Problems:
+Calls a special "restart" API on the service
+If that fails, tells humans to restart the service
+For Database Problems:
+Disconnects and reconnects to the database
+If that fails, tells humans to check the database server
+4. The Brain (The Main Controller)
+There's a main "brain" called PublishingPipelineMonitor that:
+Coordinates everything - tells each part what to do
+Remembers past problems - "This database failed 3 times today"
+Makes decisions - "This is urgent, send critical alert"
+The Code Structure (Like a Well-Organized Toolbox)
+The code is organized like a toolbox with different tools for different jobs:
+📁 src/├── 📁 core/           # The main "brain" (PublishingPipelineMonitor)├── 📁 services/       # Special tools for specific jobs│   ├── healthChecker.js    # Tests if things are working│   ├── recoveryService.js  # Fixes broken things│   └── alertService.js     # Sends notifications├── 📁 api/            # The "control panel" (web server)├── 📁 utils/          # Helper tools (logging, etc.)└── 📁 types/          # Definitions (what things should look like)
+Real-World Example
+Scenario: Your validation service crashes at 2:00 PM.
+What happens:
+2:00:00 - System checks validation service → "Not responding!"
+2:00:01 - Sends alerts to team
+2:00:02 - Tries to restart validation service automatically
+2:00:03 - Service restarts successfully! Logs "Recovery took 1 second"
+2:00:30 - Next check confirms everything works
+Result: Problem fixed in 3 seconds, team notified, everything logged.
+Key Benefits
+Fast Response - Catches problems in seconds, not hours
+Auto-Healing - Fixes many problems without human help
+Clear Records - Everything logged for later analysis
+Scalable - Can monitor many systems at once
+Flexible - Easy to add new checks or alerts
+How to Use It
+Start it: npm start
+Check status: Visit http://localhost:3000/api/v1/pipeline/status
+Manual fix: Call POST /api/v1/pipeline/recovery/database
+Read logs: Check logs/audit.log for what happened
+The "Smart" Parts
+It learns from failures - If something fails repeatedly, it sends more urgent alerts
+It times out - Won't wait forever for slow responses
+It retries - Tries multiple ways to fix problems
+It's safe - Won't break working things while fixing broken ones
+It tells you what to do - When auto-fix fails, gives clear instructions
+This system turns reactive "fix when broken" into proactive "prevent and auto-fix" monitoring! 🛠️✨
