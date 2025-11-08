@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏗️ Technical Architecture - Publishing Pipeline Monitor</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e6e6e6;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            color: white;
+            padding: 50px 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Architecture Overview */
+        .arch-overview {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .arch-diagram {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'JetBrains Mono', monospace;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .arch-diagram pre {
+            color: #00ff88;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Section Styles */
+        .section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-header i {
+            font-size: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .section-content {
+            padding: 30px;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: rgba(0,0,0,0.4);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .code-block pre {
+            color: #00ff88;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        .code-block .comment {
+            color: #888;
+        }
+
+        .code-block .keyword {
+            color: #ff6b6b;
+        }
+
+        .code-block .string {
+            color: #ffd93d;
+        }
+
+        .code-block .function {
+            color: #4ecdc4;
+        }
+
+        .code-block .variable {
+            color: #45b7d1;
+        }
+
+        /* Component Cards */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .component-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .component-card:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .component-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .component-icon {
+            font-size: 2rem;
+            color: #667eea;
+        }
+
+        .component-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .component-desc {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .method-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .method-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .method-list li:last-child {
+            border-bottom: none;
+        }
+
+        .method-name {
+            color: #4ecdc4;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+
+        .method-desc {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        /* Data Flow */
+        .flow-diagram {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .flow-step {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid #667eea;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 10px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .flow-arrow {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin: 0 10px;
+        }
+
+        /* Algorithm Explanations */
+        .algorithm-box {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .algorithm-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .algorithm-box .formula {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #ffd93d;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        /* Configuration Table */
+        .config-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .config-table th,
+        .config-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .config-table th {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .config-table td:first-child {
+            color: #4ecdc4;
+            font-weight: 500;
+        }
+
+        .config-table td:nth-child(2) {
+            color: #ffd93d;
+        }
+
+        /* API Endpoints */
+        .api-endpoint {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+
+        .api-method {
+            color: #28a745;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .api-path {
+            color: #ffd93d;
+            font-family: 'JetBrains Mono', monospace;
+            margin-left: 10px;
+        }
+
+        .api-desc {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #888;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 50px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .config-table {
+                font-size: 0.8rem;
+            }
+
+            .config-table th,
+            .config-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-cogs"></i> Technical Architecture</h1>
+            <p>Deep Dive into Publishing Pipeline Monitor Implementation</p>
+            <div class="subtitle">System Design • Data Flow • Algorithms • Infrastructure</div>
+        </div>
+
+        <!-- Architecture Overview -->
+        <div class="arch-overview">
+            <h2 style="color: #667eea; margin-bottom: 20px; text-align: center;">
+                <i class="fas fa-sitemap"></i> System Architecture Overview
+            </h2>
+
+            <div class="arch-diagram">
+                <pre>
+┌─────────────────────────────────────────────────────────────────────┐
+│                    PUBLISHING PIPELINE MONITOR                       │
+│                        ┌─────────────────┐                           │
+│                        │  EXPRESS SERVER │                           │
+│                        │    (Port 3000) │                           │
+│                        └─────────┬───────┘                           │
+│                                  │                                  │
+│                    ┌─────────────┼─────────────┐                   │
+│                    │             │             │                   │
+│          ┌─────────▼────────┐ ┌──▼────────┐ ┌──▼────────┐         │
+│          │ PublishingPipe- │ │ AlertSer- │ │ Recovery- │         │
+│          │ lineMonitor     │ │ vice      │ │ Service   │         │
+│          └─────────┬───────┘ └───────────┘ └───────────┘         │
+│                    │                                              │
+│          ┌─────────▼────────┐                                   │
+│          │   HealthChecker  │                                   │
+│          │   ┌─────────────┐│                                   │
+│          │   │ Network     ││                                   │
+│          │   │ Validation  ││                                   │
+│          │   │ Database    ││                                   │
+│          └─────────────────┘┘                                   │
+│                                                                       │
+│  ┌─────────────────────────────────────────────────────────────┐   │
+│  │                    EXTERNAL SYSTEMS                          │   │
+│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────┐ │   │
+│  │  │ Validation  │ │ MongoDB     │ │ Slack API   │ │ Email   │ │   │
+│  │  │ Service     │ │ Database    │ │ Webhooks    │ │ SMTP    │ │   │
+│  │  │ (Mock)      │ │ (Mock)      │ │ Service     │ │ Service │ │   │
+│  └─────────────┴──┴─────────────┴──┴─────────────┴──┴─────────┴─┘   │
+└─────────────────────────────────────────────────────────────────────┘
+
+Data Flow: Health Checks → Monitoring → Alerting → Recovery → Logging
+</pre>
+            </div>
+
+            <p style="text-align: center; color: #ccc; margin-top: 20px;">
+                <strong>Core Architecture:</strong> Event-driven Node.js application with modular service architecture
+            </p>
+        </div>
+
+        <!-- Core Components Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-cubes"></i>
+                <h2>Core Components Architecture</h2>
+            </div>
+            <div class="section-content">
+                <div class="component-grid">
+                    <div class="component-card">
+                        <div class="component-header">
+                            <i class="fas fa-heartbeat component-icon"></i>
+                            <div class="component-title">HealthChecker</div>
+                        </div>
+                        <div class="component-desc">
+                            Responsible for performing health checks on all system components
+                        </div>
+                        <ul class="method-list">
+                            <li>
+                                <span class="method-name">performFullHealthCheck()</span>
+                                <span class="method-desc">Executes checks on all components</span>
+                            </li>
+                            <li>
+                                <span class="method-name">checkNetworkConnectivity()</span>
+                                <span class="method-desc">Tests external network access</span>
+                            </li>
+                            <li>
+                                <span class="method-name">checkValidationService()</span>
+                                <span class="method-desc">Validates service availability</span>
+                            </li>
+                            <li>
+                                <span class="method-name">checkDatabaseConnectivity()</span>
+                                <span class="method-desc">Tests database connections</span>
+                            </li>
+                            <li>
+                                <span class="method-name">getOverallHealth()</span>
+                                <span class="method-desc">Calculates system health status</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="component-card">
+                        <div class="component-header">
+                            <i class="fas fa-bell component-icon"></i>
+                            <div class="component-title">AlertService</div>
+                        </div>
+                        <div class="component-desc">
+                            Multi-channel notification system for failure alerts
+                        </div>
+                        <ul class="method-list">
+                            <li>
+                                <span class="method-name">sendAlert()</span>
+                                <span class="method-desc">Main alert dispatch method</span>
+                            </li>
+                            <li>
+                                <span class="method-name">_sendSlackAlert()</span>
+                                <span class="method-desc">Formats and sends Slack notifications</span>
+                            </li>
+                            <li>
+                                <span class="method-name">_sendEmailAlert()</span>
+                                <span class="method-desc">Handles email notifications</span>
+                            </li>
+                            <li>
+                                <span class="method-name">_sendWebhookAlert()</span>
+                                <span class="method-desc">Posts to webhook endpoints</span>
+                            </li>
+                            <li>
+                                <span class="method-name">_executeAlert()</span>
+                                <span class="method-desc">Routes alerts by channel type</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="component-card">
+                        <div class="component-header">
+                            <i class="fas fa-tools component-icon"></i>
+                            <div class="component-title">RecoveryService</div>
+                        </div>
+                        <div class="component-desc">
+                            Intelligent auto-recovery system with configurable strategies
+                        </div>
+                        <ul class="method-list">
+                            <li>
+                                <span class="method-name">attemptRecovery()</span>
+                                <span class="method-desc">Orchestrates recovery attempts</span>
+                            </li>
+                            <li>
+                                <span class="method-name">_recoverNetwork()</span>
+                                <span class="method-desc">DNS cache flush and network recovery</span>
+                            </li>
+                            <li>
+                                <span class="method-name">_recoverValidationService()</span>
+                                <span class="method-desc">Service restart and API recovery</span>
+                            </li>
+                            <li>
+                                <span class="method-name">_recoverDatabase()</span>
+                                <span class="method-desc">Connection refresh and DB recovery</span>
+                            </li>
+                            <li>
+                                <span class="method-name">_executeRecoveryAction()</span>
+                                <span class="method-desc">Executes recovery with retry logic</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="component-card">
+                        <div class="component-header">
+                            <i class="fas fa-brain component-icon"></i>
+                            <div class="component-title">PublishingPipelineMonitor</div>
+                        </div>
+                        <div class="component-desc">
+                            Main orchestrator coordinating health checks, alerts, and recovery
+                        </div>
+                        <ul class="method-list">
+                            <li>
+                                <span class="method-name">start()</span>
+                                <span class="method-desc">Initializes monitoring loop</span>
+                            </li>
+                            <li>
+                                <span class="method-name">performHealthCheck()</span>
+                                <span class="method-desc">Executes health checks and handles failures</span>
+                            </li>
+                            <li>
+                                <span class="method-name">handlePipelineFailure()</span>
+                                <span class="method-desc">Processes component failures</span>
+                            </li>
+                            <li>
+                                <span class="method-name">attemptRecovery()</span>
+                                <span class="method-desc">Triggers recovery operations</span>
+                            </li>
+                            <li>
+                                <span class="method-name">getDashboardStats()</span>
+                                <span class="method-desc">Calculates monitoring statistics</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Flow Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-route"></i>
+                <h2>Data Flow & Communication</h2>
+            </div>
+            <div class="section-content">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Monitoring Cycle Data Flow</h3>
+
+                <div class="flow-diagram">
+                    <div class="flow-step">1. Health Check Trigger (30s cron)</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">2. Component Health Checks</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">3. Results Analysis</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">4. Failure Detection</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">5. Alert Generation</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">6. Auto-Recovery</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">7. Audit Logging</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">8. Dashboard Update</div>
+                </div>
+
+                <div class="code-block" data-lang="javascript">
+                    <pre>
+// Health Check Execution Flow
+<span class="keyword">async</span> <span class="function">performHealthCheck</span>() {
+    <span class="comment">// 1. Execute all component checks in parallel</span>
+    <span class="keyword">const</span> results = <span class="keyword">await</span> Promise.allSettled([
+        this.healthChecker.checkNetworkConnectivity(),
+        this.healthChecker.checkValidationService(),
+        this.healthChecker.checkDatabaseConnectivity()
+    ]);
+
+    <span class="comment">// 2. Analyze results and update metrics</span>
+    <span class="keyword">const</span> healthyResults = results.filter(r => r.status === <span class="string">'fulfilled'</span> && r.value.isHealthy);
+    <span class="keyword">const</span> failedResults = results.filter(r => r.status === <span class="string">'rejected'</span> || !r.value.isHealthy);
+
+    <span class="comment">// 3. Update statistics</span>
+    this.totalChecks++;
+    this.successfulChecks += healthyResults.length;
+    this.failedChecks += failedResults.length;
+
+    <span class="comment">// 4. Handle failures</span>
+    <span class="keyword">for</span> (<span class="keyword">const</span> failure <span class="keyword">of</span> failedResults) {
+        <span class="keyword">await</span> this.handlePipelineFailure(failure.value || failure.reason);
+    }
+
+    <span class="comment">// 5. Log system status</span>
+    AuditLogger.logSystemStatus(
+        healthyResults.length === results.length,
+        results.length,
+        failedResults.length,
+        { checkId: uuidv4() }
+    );
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Algorithms Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-calculator"></i>
+                <h2>Monitoring Algorithms & Calculations</h2>
+            </div>
+            <div class="section-content">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Key Metrics Calculations</h3>
+
+                <div class="algorithm-box">
+                    <h4>Uptime Percentage Calculation</h4>
+                    <div class="formula">
+uptimePercentage = (healthyChecks / totalChecks) × 100
+</div>
+                    <p>Calculated from the last 100 health checks stored in the uptimeHistory array. This rolling average provides a current view of system stability.</p>
+                </div>
+
+                <div class="algorithm-box">
+                    <h4>Success Rate Algorithm</h4>
+                    <div class="formula">
+successRate = (successfulChecks ÷ totalChecks) × 100
+</div>
+                    <p>Tracks the percentage of health checks that pass successfully across all components since the monitor started.</p>
+                </div>
+
+                <div class="algorithm-box">
+                    <h4>Recovery Rate Calculation</h4>
+                    <div class="formula">
+recoveryRate = (successfulRecoveries ÷ totalRecoveryAttempts) × 100
+</div>
+                    <p>Measures the effectiveness of the auto-recovery system by tracking successful recovery operations.</p>
+                </div>
+
+                <div class="algorithm-box">
+                    <h4>Severity Determination Logic</h4>
+                    <pre style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 5px; margin: 10px 0;">
+<span style="color: #4ecdc4;">function</span> <span style="color: #ffd93d;">determineSeverity</span>(failure) {
+    <span style="color: #888;">// Consecutive failures determine severity</span>
+    <span style="color: #ff6b6b;">if</span> (consecutiveFailures >= 5) <span style="color: #ff6b6b;">return</span> <span style="color: #ffd93d;">'CRITICAL'</span>;
+    <span style="color: #ff6b6b;">if</span> (consecutiveFailures >= 3) <span style="color: #ff6b6b;">return</span> <span style="color: #ffd93d;">'HIGH'</span>;
+    <span style="color: #ff6b6b;">if</span> (consecutiveFailures >= 1) <span style="color: #ff6b6b;">return</span> <span style="color: #ffd93d;">'MEDIUM'</span>;
+    <span style="color: #ff6b6b;">return</span> <span style="color: #ffd93d;">'LOW'</span>;
+}</pre>
+                    <p>Severity increases with consecutive failures, ensuring critical issues get immediate attention.</p>
+                </div>
+
+                <div class="algorithm-box">
+                    <h4>Retry Strategy Implementation</h4>
+                    <pre style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 5px; margin: 10px 0;">
+<span style="color: #4ecdc4;">function</span> <span style="color: #ffd93d;">calculateRetryDelay</span>(attempt, strategy) {
+    <span style="color: #ff6b6b;">switch</span> (strategy) {
+        <span style="color: #ff6b6b;">case</span> <span style="color: #ffd93d;">'FIXED'</span>:
+            <span style="color: #ff6b6b;">return</span> baseDelay;
+        <span style="color: #ff6b6b;">case</span> <span style="color: #ffd93d;">'EXPONENTIAL'</span>:
+            <span style="color: #ff6b6b;">return</span> baseDelay * Math.pow(2, attempt - 1);
+        <span style="color: #ff6b6b;">case</span> <span style="color: #ffd93d;">'LINEAR'</span>:
+            <span style="color: #ff6b6b;">return</span> baseDelay * attempt;
+    }
+}</pre>
+                    <p>Configurable retry strategies prevent overwhelming failing services while ensuring recovery attempts.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configuration Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-sliders-h"></i>
+                <h2>Configuration & Environment</h2>
+            </div>
+            <div class="section-content">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Environment Variables & Configuration</h3>
+
+                <table class="config-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>PORT</td>
+                            <td>3000</td>
+                            <td>Express server port</td>
+                            <td>number</td>
+                        </tr>
+                        <tr>
+                            <td>CHECK_INTERVAL</td>
+                            <td>30000</td>
+                            <td>Health check interval (ms)</td>
+                            <td>number</td>
+                        </tr>
+                        <tr>
+                            <td>AUTO_RECOVERY</td>
+                            <td>true</td>
+                            <td>Enable automatic recovery</td>
+                            <td>boolean</td>
+                        </tr>
+                        <tr>
+                            <td>LOG_LEVEL</td>
+                            <td>info</td>
+                            <td>Logging verbosity level</td>
+                            <td>string</td>
+                        </tr>
+                        <tr>
+                            <td>USE_MOCK_DATABASE</td>
+                            <td>true</td>
+                            <td>Use mock database for demos</td>
+                            <td>boolean</td>
+                        </tr>
+                        <tr>
+                            <td>USE_MOCK_VALIDATION</td>
+                            <td>true</td>
+                            <td>Use mock validation service</td>
+                            <td>boolean</td>
+                        </tr>
+                        <tr>
+                            <td>VALIDATION_SERVICE_URL</td>
+                            <td>http://localhost:3001</td>
+                            <td>Validation service endpoint</td>
+                            <td>string</td>
+                        </tr>
+                        <tr>
+                            <td>DATABASE_URL</td>
+                            <td>mongodb://localhost:27017</td>
+                            <td>MongoDB connection string</td>
+                            <td>string</td>
+                        </tr>
+                        <tr>
+                            <td>SLACK_WEBHOOK_URL</td>
+                            <td>null</td>
+                            <td>Slack webhook for alerts</td>
+                            <td>string</td>
+                        </tr>
+                        <tr>
+                            <td>EMAIL_ALERT_ADDRESS</td>
+                            <td>null</td>
+                            <td>Email address for alerts</td>
+                            <td>string</td>
+                        </tr>
+                        <tr>
+                            <td>WEBHOOK_URL</td>
+                            <td>null</td>
+                            <td>Custom webhook endpoint</td>
+                            <td>string</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="code-block" data-lang="javascript">
+                    <pre>
+// Configuration Loading Logic
+<span class="keyword">const</span> config = {
+    port: process.env.PORT || 3000,
+    host: process.env.HOST || <span class="string">'localhost'</span>,
+    checkInterval: parseInt(process.env.CHECK_INTERVAL) || 30000,
+    autoRecovery: process.env.AUTO_RECOVERY !== <span class="string">'false'</span>,
+    logLevel: process.env.LOG_LEVEL || <span class="string">'info'</span>,
+
+    <span class="comment">// Service endpoints</span>
+    services: {
+        validationService: process.env.VALIDATION_SERVICE_URL || <span class="string">'http://localhost:3001'</span>,
+        database: process.env.DATABASE_URL || <span class="string">'mongodb://localhost:27017/publishing'</span>,
+        networkEndpoint: process.env.NETWORK_ENDPOINT || <span class="string">'https://httpbin.org/status/200'</span>
+    },
+
+    <span class="comment">// Alert configurations</span>
+    alerts: [],
+    timeout: parseInt(process.env.TIMEOUT) || 5000,
+    retryAttempts: parseInt(process.env.RETRY_ATTEMPTS) || 3,
+    retryDelay: parseInt(process.env.RETRY_DELAY) || 1000,
+    recoveryTimeout: parseInt(process.env.RECOVERY_TIMEOUT) || 30000
+};</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Architecture Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-code"></i>
+                <h2>API Architecture & Endpoints</h2>
+            </div>
+            <div class="section-content">
+                <h3 style="color: #667eea; margin-bottom: 20px;">REST API Endpoints</h3>
+
+                <div class="api-endpoint">
+                    <span class="api-method">GET</span>
+                    <span class="api-path">/api/v1/pipeline/status</span>
+                    <div class="api-desc">Returns current health status of all monitored components</div>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="api-method">GET</span>
+                    <span class="api-path">/api/v1/dashboard/stats</span>
+                    <div class="api-desc">Returns comprehensive dashboard statistics and metrics</div>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="api-method">POST</span>
+                    <span class="api-path">/api/v1/monitor/start</span>
+                    <div class="api-desc">Starts the monitoring system and health check loop</div>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="api-method">POST</span>
+                    <span class="api-path">/api/v1/monitor/stop</span>
+                    <div class="api-desc">Stops the monitoring system and health check loop</div>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="api-method">POST</span>
+                    <span class="api-path">/api/v1/recovery/manual/:component</span>
+                    <div class="api-desc">Triggers manual recovery for a specific component</div>
+                </div>
+
+                <div class="api-endpoint">
+                    <span class="api-method">GET</span>
+                    <span class="api-path">/health</span>
+                    <div class="api-desc">Basic health check endpoint for load balancers</div>
+                </div>
+
+                <h4 style="color: #667eea; margin: 30px 0 20px 0;">Response Data Structures</h4>
+
+                <div class="code-block" data-lang="json">
+                    <pre>
+// /api/v1/pipeline/status Response
+{
+    <span class="string">"success"</span>: <span class="keyword">true</span>,
+    <span class="string">"data"</span>: {
+        <span class="string">"isHealthy"</span>: <span class="keyword">true</span>,
+        <span class="string">"status"</span>: <span class="string">"All components healthy"</span>,
+        <span class="string">"checks"</span>: [
+            {
+                <span class="string">"component"</span>: <span class="string">"network"</span>,
+                <span class="string">"isHealthy"</span>: <span class="keyword">true</span>,
+                <span class="string">"status"</span>: <span class="string">"Network connectivity OK"</span>,
+                <span class="string">"responseTime"</span>: 45,
+                <span class="string">"error"</span>: <span class="keyword">null</span>,
+                <span class="string">"timestamp"</span>: <span class="string">"2025-11-08T13:27:01.000Z"</span>
+            }
+        ],
+        <span class="string">"checkId"</span>: <span class="string">"uuid-here"</span>
+    }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Handling Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h2>Error Handling & Recovery Strategies</h2>
+            </div>
+            <div class="section-content">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Error Classification & Handling</h3>
+
+                <div class="code-block" data-lang="javascript">
+                    <pre>
+// Error Handling Strategy
+<span class="keyword">class</span> <span class="variable">ErrorHandler</span> {
+    <span class="keyword">static</span> <span class="function">classifyError</span>(error) {
+        <span class="comment">// Network errors</span>
+        <span class="keyword">if</span> (error.code === <span class="string">'ECONNREFUSED'</span> || error.code === <span class="string">'ENOTFOUND'</span>) {
+            <span class="keyword">return</span> { type: <span class="string">'NETWORK_ERROR'</span>, recoverable: <span class="keyword">true</span>, priority: <span class="string">'HIGH'</span> };
+        }
+
+        <span class="comment">// Timeout errors</span>
+        <span class="keyword">if</span> (error.code === <span class="string">'ETIMEDOUT'</span> || error.message.includes(<span class="string">'timeout'</span>)) {
+            <span class="keyword">return</span> { type: <span class="string">'TIMEOUT_ERROR'</span>, recoverable: <span class="keyword">true</span>, priority: <span class="string">'MEDIUM'</span> };
+        }
+
+        <span class="comment">// Authentication errors</span>
+        <span class="keyword">if</span> (error.response?.status === 401 || error.response?.status === 403) {
+            <span class="keyword">return</span> { type: <span class="string">'AUTH_ERROR'</span>, recoverable: <span class="keyword">false</span>, priority: <span class="string">'CRITICAL'</span> };
+        }
+
+        <span class="comment">// Default case</span>
+        <span class="keyword">return</span> { type: <span class="string">'UNKNOWN_ERROR'</span>, recoverable: <span class="keyword">false</span>, priority: <span class="string">'LOW'</span> };
+    }
+
+    <span class="keyword">static</span> <span class="function">getRecoveryStrategy</span>(errorType) {
+        <span class="keyword">const</span> strategies = {
+            <span class="string">'NETWORK_ERROR'</span>: [<span class="string">'dns-refresh'</span>, <span class="string">'network-restart'</span>],
+            <span class="string">'TIMEOUT_ERROR'</span>: [<span class="string">'connection-refresh'</span>, <span class="string">'service-restart'</span>],
+            <span class="string">'DATABASE_ERROR'</span>: [<span class="string">'connection-restart'</span>, <span class="string">'pool-refresh'</span>]
+        };
+
+        <span class="keyword">return</span> strategies[errorType] || [<span class="string">'manual-intervention'</span>];
+    }
+}</pre>
+                </div>
+
+                <h4 style="color: #667eea; margin: 30px 0 20px 0;">Recovery Execution with Timeouts</h4>
+
+                <div class="code-block" data-lang="javascript">
+                    <pre>
+// Recovery Action Execution with Timeout Protection
+<span class="keyword">async</span> <span class="function">_executeRecoveryAction</span>(actionName, actionFn, options = {}) {
+    <span class="keyword">const</span> { maxAttempts = 3, timeout = this.config.recoveryTimeout } = options;
+
+    <span class="keyword">for</span> (<span class="keyword">let</span> attempt = 1; attempt <= maxAttempts; attempt++) {
+        <span class="keyword">try</span> {
+            <span class="comment">// Execute action with timeout protection</span>
+            <span class="keyword">const</span> result = <span class="keyword">await</span> Promise.race([
+                actionFn(),
+                <span class="keyword">new</span> Promise((_, reject) =>
+                    setTimeout(() => reject(<span class="keyword">new</span> Error(`${actionName} timed out`)), timeout)
+                )
+            ]);
+
+            <span class="comment">// Success - return result</span>
+            <span class="keyword">return</span> { success: <span class="keyword">true</span>, result, attempt };
+
+        } <span class="keyword">catch</span> (error) {
+            <span class="comment">// Log failure attempt</span>
+            this.logger.warn(`${actionName} failed (attempt ${attempt}/${maxAttempts})`, {
+                error: error.message,
+                attempt,
+                maxAttempts
+            });
+
+            <span class="comment">// Wait before retry (with exponential backoff)</span>
+            <span class="keyword">if</span> (attempt < maxAttempts) {
+                <span class="keyword">const</span> delay = this._calculateRetryDelay(attempt, this.config.retryStrategy);
+                <span class="keyword">await</span> <span class="keyword">new</span> Promise(resolve => setTimeout(resolve, delay));
+            }
+        }
+    }
+
+    <span class="comment">// All attempts failed</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error(`${actionName} failed after ${maxAttempts} attempts`);
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logging & Audit Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-database"></i>
+                <h2>Logging & Audit Architecture</h2>
+            </div>
+            <div class="section-content">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Winston Logging Configuration</h3>
+
+                <div class="code-block" data-lang="javascript">
+                    <pre>
+// Winston Logger Configuration
+<span class="keyword">const</span> logger = winston.createLogger({
+    level: config.logLevel,
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.errors({ stack: <span class="keyword">true</span> }),
+        winston.format.json()
+    ),
+    defaultMeta: { service: <span class="string">'publishing-pipeline-monitor'</span> },
+    transports: [
+        <span class="comment">// Console transport for development</span>
+        <span class="keyword">new</span> winston.transports.Console({
+            format: winston.format.combine(
+                winston.format.colorize(),
+                winston.format.simple()
+            )
+        }),
+
+        <span class="comment">// File transport for application logs</span>
+        <span class="keyword">new</span> winston.transports.File({
+            filename: <span class="string">'logs/pipeline.log'</span>,
+            maxsize: 5242880, <span class="comment">// 5MB</span>
+            maxFiles: 5
+        }),
+
+        <span class="comment">// Separate file for audit logs</span>
+        <span class="keyword">new</span> winston.transports.File({
+            filename: <span class="string">'logs/audit.log'</span>,
+            level: <span class="string">'info'</span>,
+            format: winston.format.combine(
+                winston.format.timestamp(),
+                winston.format.json()
+            )
+        })
+    ]
+});</pre>
+                </div>
+
+                <h4 style="color: #667eea; margin: 30px 0 20px 0;">Audit Log Structure</h4>
+
+                <div class="code-block" data-lang="json">
+                    <pre>
+// Audit Log Entry Structure
+{
+    <span class="string">"timestamp"</span>: <span class="string">"2025-11-08T13:27:01.000Z"</span>,
+    <span class="string">"level"</span>: <span class="string">"INFO"</span>,
+    <span class="string">"message"</span>: <span class="string">"Health check passed for validation-service"</span>,
+    <span class="string">"event"</span>: <span class="string">"HEALTH_CHECK"</span>,
+    <span class="string">"component"</span>: <span class="string">"validation-service"</span>,
+    <span class="string">"healthy"</span>: <span class="keyword">true</span>,
+    <span class="string">"responseTime"</span>: 87,
+    <span class="string">"error"</span>: <span class="keyword">null</span>,
+    <span class="string">"checkId"</span>: <span class="string">"uuid-here"</span>,
+    <span class="string">"service"</span>: <span class="string">"publishing-pipeline-monitor"</span>
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Section -->
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-tachometer-alt"></i>
+                <h2>Performance & Scalability</h2>
+            </div>
+            <div class="section-content">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Performance Characteristics</h3>
+
+                <div class="algorithm-box">
+                    <h4>Concurrent Health Checks</h4>
+                    <p>The system uses <code>Promise.allSettled()</code> to execute all health checks concurrently, ensuring that a slow network check doesn't delay database or validation service checks. This parallel execution keeps the total monitoring cycle time minimal.</p>
+                </div>
+
+                <div class="algorithm-box">
+                    <h4>Memory Management</h4>
+                    <pre style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 5px; margin: 10px 0;">
+<span style="color: #4ecdc4;">class</span> <span style="color: #ffd93d;">PublishingPipelineMonitor</span> {
+    <span class="keyword">constructor</span>() {
+        <span class="comment">// Circular buffers for memory efficiency</span>
+        this.uptimeHistory = <span class="keyword">new</span> Array(100).fill(<span class="keyword">true</span>); <span class="comment">// Last 100 checks</span>
+        this.consecutiveFailures = <span class="keyword">new</span> Map(); <span class="comment">// Component failure tracking</span>
+        this.recoveryHistory = []; <span class="comment">// Limited to last 10 recoveries</span>
+
+        <span class="comment">// Automatic cleanup</span>
+        setInterval(() => {
+            <span class="keyword">if</span> (this.recoveryHistory.length > 10) {
+                this.recoveryHistory = this.recoveryHistory.slice(-10);
+            }
+        }, 300000); <span class="comment">// Clean every 5 minutes</span>
+    }
+}</pre>
+                    <p>Memory usage is controlled through circular buffers and automatic cleanup of historical data.</p>
+                </div>
+
+                <div class="algorithm-box">
+                    <h4>Timeout Protection</h4>
+                    <p>All network operations include configurable timeouts to prevent hanging operations. The default 5-second timeout ensures the monitoring system remains responsive even when services are unreachable.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3><i class="fas fa-microchip"></i> Enterprise-Grade Technical Architecture</h3>
+            <p>This implementation demonstrates advanced Node.js patterns, scalable architecture, and production-ready monitoring systems.</p>
+            <div style="margin-top: 20px;">
+                <i class="fab fa-node-js" style="font-size: 2rem; margin: 0 15px;"></i>
+                <i class="fas fa-server" style="font-size: 2rem; margin: 0 15px;"></i>
+                <i class="fas fa-database" style="font-size: 2rem; margin: 0 15px;"></i>
+                <i class="fas fa-shield-alt" style="font-size: 2rem; margin: 0 15px;"></i>
+                <i class="fas fa-chart-line" style="font-size: 2rem; margin: 0 15px;"></i>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
