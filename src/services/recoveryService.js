@@ -11,6 +11,8 @@ class RecoveryService {
       maxRecoveryAttempts: config.maxRecoveryAttempts || 3,
       recoveryTimeout: config.recoveryTimeout || 30000,
       retryDelay: config.retryDelay || 2000,
+      retryStrategy: config.retryStrategy || 'fixed', // 'fixed', 'exponential', 'linear'
+      maxRetryDelay: config.maxRetryDelay || 30000,
       ...config
     };
 
@@ -291,15 +293,66 @@ class RecoveryService {
   }
 
   /**
-   * Execute a recovery action with timeout and error handling
+   * Execute a recovery action with timeout, retry strategy, and error handling
    */
-  async _executeRecoveryAction(actionName, actionFn) {
-    return await Promise.race([
-      actionFn(),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error(`${actionName} timed out`)), this.config.recoveryTimeout)
-      )
-    ]);
+  async _executeRecoveryAction(actionName, actionFn, attemptNumber = 1) {
+    const maxAttempts = this.config.maxRecoveryAttempts;
+
+    for (let attempt = attemptNumber; attempt <= maxAttempts; attempt++) {
+      try {
+        logger.debug(`Executing recovery action ${actionName} (attempt ${attempt}/${maxAttempts})`);
+
+        const result = await Promise.race([
+          actionFn(),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error(`${actionName} timed out`)), this.config.recoveryTimeout)
+          )
+        ]);
+
+        return result;
+
+      } catch (error) {
+        logger.warn(`Recovery action ${actionName} failed (attempt ${attempt}/${maxAttempts})`, {
+          error: error.message,
+          attempt,
+          maxAttempts
+        });
+
+        if (attempt < maxAttempts) {
+          // Calculate delay based on retry strategy
+          const delay = this._calculateRetryDelay(attempt);
+          logger.info(`Waiting ${delay}ms before retry...`);
+          await this._delay(delay);
+        } else {
+          // All attempts failed
+          throw new Error(`${actionName} failed after ${maxAttempts} attempts: ${error.message}`);
+        }
+      }
+    }
+  }
+
+  /**
+   * Calculate retry delay based on configured strategy
+   */
+  _calculateRetryDelay(attemptNumber) {
+    const baseDelay = this.config.retryDelay;
+
+    switch (this.config.retryStrategy.toLowerCase()) {
+      case 'exponential':
+        // Exponential backoff: delay * 2^(attempt-1)
+        const exponentialDelay = baseDelay * Math.pow(2, attemptNumber - 1);
+        return Math.min(exponentialDelay, this.config.maxRetryDelay);
+
+      case 'linear':
+        // Linear increase: delay * attempt
+        const linearDelay = baseDelay * attemptNumber;
+        return Math.min(linearDelay, this.config.maxRetryDelay);
+
+      case 'fixed':
+      default:
+        // Fixed delay
+        return baseDelay;
+    }
   }
 
   /**

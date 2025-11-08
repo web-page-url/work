@@ -316,6 +316,17 @@
             }
         }
 
+        async function fetchDashboardStats() {
+            try {
+                const response = await fetch(`${API_BASE}/dashboard/stats`);
+                const data = await response.json();
+                return data.data;
+            } catch (error) {
+                console.error('Failed to fetch dashboard stats:', error);
+                return null;
+            }
+        }
+
         function createStatusCard(component) {
             const isHealthy = component.isHealthy;
             const statusClass = isHealthy ? 'status-healthy' : 'status-unhealthy';
@@ -423,6 +434,48 @@
             `;
         }
 
+        function createDashboardStatsCard(stats) {
+            return `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="component-icon" style="background: linear-gradient(45deg, #9c88ff, #6c5ce7);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="status-indicator" style="background: #9c88ff; color: white;">
+                            <i class="fas fa-chart-bar"></i> System Metrics
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Dashboard Statistics</h3>
+                        <div class="metric">
+                            <span class="metric-label">Uptime</span>
+                            <span class="metric-value">${stats.uptimePercentage}%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Total Checks</span>
+                            <span class="metric-value">${stats.totalChecks}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Success Rate</span>
+                            <span class="metric-value">${stats.checkSuccessRate}%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Recovery Rate</span>
+                            <span class="metric-value">${stats.recoveryRate}%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Last Recovery</span>
+                            <span class="metric-value">${stats.lastRecoveryTime ? new Date(stats.lastRecoveryTime).toLocaleTimeString() : 'Never'}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Monitoring Time</span>
+                            <span class="metric-value">${stats.totalMonitoringTime} min</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         function getComponentIcon(component) {
             switch(component) {
                 case 'network': return 'globe';
@@ -449,7 +502,10 @@
                 </div>
             `;
 
-            const status = await fetchStatus();
+            const [status, stats] = await Promise.all([
+                fetchStatus(),
+                fetchDashboardStats()
+            ]);
 
             if (!status) {
                 dashboard.innerHTML = `
@@ -467,6 +523,7 @@
             // Create dashboard HTML
             const html = `
                 ${createOverallStatusCard(status)}
+                ${stats ? createDashboardStatsCard(stats) : ''}
                 ${status.checks.map(createStatusCard).join('')}
                 ${createRecoveryCard(status.recoverySuggestion)}
             `;

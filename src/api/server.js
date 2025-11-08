@@ -75,6 +75,9 @@ class PipelineMonitorServer {
     router.post('/api/v1/monitor/stop', this.stopMonitor.bind(this));
     router.get('/api/v1/monitor/stats', this.getMonitorStats.bind(this));
 
+    // Dashboard endpoints
+    router.get('/api/v1/dashboard/stats', this.getDashboardStats.bind(this));
+
     // Configuration endpoints
     router.get('/api/v1/config', this.getConfig.bind(this));
     router.put('/api/v1/config', this.updateConfig.bind(this));
@@ -311,6 +314,34 @@ class PipelineMonitorServer {
       logger.error('Failed to get monitor stats', { error: error.message });
       res.status(500).json({
         error: 'Failed to get stats',
+        message: error.message
+      });
+    }
+  }
+
+  /**
+   * Get dashboard statistics with uptime, recovery metrics, etc.
+   */
+  getDashboardStats(req, res) {
+    try {
+      if (!this.monitor) {
+        return res.status(503).json({
+          error: 'Monitor not initialized',
+          message: 'Pipeline monitor has not been started'
+        });
+      }
+
+      const stats = this.monitor.getDashboardStats();
+
+      res.json({
+        success: true,
+        data: stats,
+        timestamp: new Date()
+      });
+    } catch (error) {
+      logger.error('Failed to get dashboard stats', { error: error.message });
+      res.status(500).json({
+        error: 'Failed to get dashboard statistics',
         message: error.message
       });
     }

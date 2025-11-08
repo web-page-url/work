@@ -11,6 +11,8 @@ class HealthChecker {
       timeout: config.timeout || 5000,
       retryAttempts: config.retryAttempts || 2,
       retryDelay: config.retryDelay || 1000,
+      useMockDatabase: config.useMockDatabase || false, // Enable mock database for demos
+      useMockValidation: config.useMockValidation !== false, // Enable mock validation for demos (default: true)
       ...config
     };
   }
@@ -105,11 +107,64 @@ class HealthChecker {
   }
 
   /**
+   * Mock validation service health check for demonstrations
+   * @returns {Promise<Object>} Health check result
+   */
+  async checkValidationServiceMock() {
+    const startTime = Date.now();
+
+    // Simulate network delay (30-100ms)
+    const delay = Math.random() * 70 + 30;
+    await new Promise(resolve => setTimeout(resolve, delay));
+
+    // Simulate validation service health check - 75% chance healthy
+    const isHealthy = Math.random() > 0.25;
+
+    const responseTime = Date.now() - startTime;
+
+    if (isHealthy) {
+      return {
+        isHealthy: true,
+        component: 'validation-service',
+        status: 'Validation service healthy (mock)',
+        responseTime,
+        error: null,
+        timestamp: new Date()
+      };
+    } else {
+      // Simulate different types of validation service failures
+      const errors = [
+        'Validation service unavailable',
+        'Content validation failed',
+        'Schema validation error',
+        'API endpoint not responding',
+        'Service timeout'
+      ];
+      const randomError = errors[Math.floor(Math.random() * errors.length)];
+
+      return {
+        isHealthy: false,
+        component: 'validation-service',
+        status: 'Validation service test failed (mock)',
+        responseTime,
+        error: randomError,
+        timestamp: new Date()
+      };
+    }
+  }
+
+  /**
    * Check validation service health
    * @param {string} serviceUrl - Validation service URL
    * @returns {Promise<Object>} Health check result
    */
   async checkValidationService(serviceUrl) {
+    // Use mock validation check if enabled (for demos and testing)
+    if (this.config.useMockValidation) {
+      return await this.checkValidationServiceMock();
+    }
+
+    // Otherwise use real validation service check
     const startTime = Date.now();
 
     try {
@@ -203,11 +258,64 @@ class HealthChecker {
   }
 
   /**
+   * Mock database health check for demonstrations
+   * @returns {Promise<Object>} Health check result
+   */
+  async checkDatabaseMock() {
+    const startTime = Date.now();
+
+    // Simulate network delay (50-200ms)
+    const delay = Math.random() * 150 + 50;
+    await new Promise(resolve => setTimeout(resolve, delay));
+
+    // Simulate DB health check - 70% chance healthy
+    const isHealthy = Math.random() > 0.3;
+
+    const responseTime = Date.now() - startTime;
+
+    if (isHealthy) {
+      return {
+        isHealthy: true,
+        component: 'database',
+        status: 'Database connection healthy (mock)',
+        responseTime,
+        error: null,
+        timestamp: new Date()
+      };
+    } else {
+      // Simulate different types of database failures
+      const errors = [
+        'Database connection failed',
+        'Connection timeout',
+        'Authentication failed',
+        'Database server unreachable',
+        'Connection pool exhausted'
+      ];
+      const randomError = errors[Math.floor(Math.random() * errors.length)];
+
+      return {
+        isHealthy: false,
+        component: 'database',
+        status: 'Database connection failed (mock)',
+        responseTime,
+        error: randomError,
+        timestamp: new Date()
+      };
+    }
+  }
+
+  /**
    * Check database connectivity
    * @param {string} connectionString - Database connection string
    * @returns {Promise<Object>} Health check result
    */
   async checkDatabaseConnectivity(connectionString) {
+    // Use mock database check if enabled (for demos and testing)
+    if (this.config.useMockDatabase) {
+      return await this.checkDatabaseMock();
+    }
+
+    // Otherwise use real database check
     const startTime = Date.now();
 
     try {

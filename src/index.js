@@ -14,6 +14,8 @@ const config = {
   checkInterval: parseInt(process.env.CHECK_INTERVAL) || 30000,
   autoRecovery: process.env.AUTO_RECOVERY !== 'false',
   logLevel: process.env.LOG_LEVEL || 'info',
+  useMockDatabase: process.env.USE_MOCK_DATABASE !== 'false', // Enable mock DB for demos
+  useMockValidation: process.env.USE_MOCK_VALIDATION !== 'false', // Enable mock validation for demos
 
   // Service endpoints
   services: {

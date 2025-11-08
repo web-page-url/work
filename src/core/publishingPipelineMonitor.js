@@ -30,6 +30,17 @@ class PublishingPipelineMonitor {
     this.consecutiveFailures = new Map();
     this.monitoringJob = null;
 
+    // Dashboard statistics
+    this.startTime = null;
+    this.totalChecks = 0;
+    this.successfulChecks = 0;
+    this.failedChecks = 0;
+    this.totalRecoveries = 0;
+    this.successfulRecoveries = 0;
+    this.lastRecoveryTime = null;
+    this.uptimeHistory = [];
+    this.alertHistory = [];
+
     // Bind methods
     this.performHealthCheck = this.performHealthCheck.bind(this);
     this.handlePipelineFailure = this.handlePipelineFailure.bind(this);
@@ -50,6 +61,7 @@ class PublishingPipelineMonitor {
     });
 
     this.isMonitoring = true;
+    this.startTime = new Date();
 
     // Perform initial health check
     await this.performHealthCheck();
@@ -110,6 +122,20 @@ class PublishingPipelineMonitor {
 
       this.lastCheckResults = healthResults;
       this.lastCheckTime = new Date();
+
+      // Update dashboard statistics
+      this.totalChecks++;
+      if (overallHealth) {
+        this.successfulChecks++;
+      } else {
+        this.failedChecks++;
+      }
+
+      // Track uptime (store last 100 checks)
+      this.uptimeHistory.push(overallHealth);
+      if (this.uptimeHistory.length > 100) {
+        this.uptimeHistory.shift();
+      }
 
       // Log overall system status
       AuditLogger.logSystemStatus(
@@ -174,7 +200,7 @@ class PublishingPipelineMonitor {
       this.consecutiveFailures.set(component, current + 1);
     });
 
-    // Send alerts for failures
+        // Send alerts for failures
     for (const failure of failedComponents) {
       try {
         await this.alertService.sendAlert(
@@ -188,6 +214,20 @@ class PublishingPipelineMonitor {
             severity: this._determineSeverity(failure)
           }
         );
+
+        // Track alert history
+        this.alertHistory.push({
+          component: failure.component,
+          type: 'failure',
+          message: `Component health check failed: ${failure.error}`,
+          timestamp: new Date(),
+          severity: this._determineSeverity(failure)
+        });
+
+        // Keep only last 50 alerts
+        if (this.alertHistory.length > 50) {
+          this.alertHistory.shift();
+        }
 
         AuditLogger.logPipelineFailure(failure.component, failure.error, {
           checkId,
@@ -224,7 +264,12 @@ class PublishingPipelineMonitor {
       const successfulRecoveries = recoveryResults.filter(result => result.success);
       const failedRecoveries = recoveryResults.filter(result => !result.success);
 
+      // Update recovery statistics
+      this.totalRecoveries += recoveryResults.length;
+      this.successfulRecoveries += successfulRecoveries.length;
+
       if (successfulRecoveries.length > 0) {
+        this.lastRecoveryTime = new Date();
         logger.info('Some recoveries succeeded', {
           checkId,
           successful: successfulRecoveries.map(r => r.component),
@@ -406,6 +451,72 @@ class PublishingPipelineMonitor {
         autoRecovery: this.config.autoRecovery,
         enabled: this.config.enabled
       }
+    };
+  }
+
+  /**
+   * Get comprehensive dashboard statistics
+   */
+  getDashboardStats() {
+    const now = new Date();
+    const uptimePercentage = this.uptimeHistory.length > 0 ?
+      (this.uptimeHistory.filter(h => h).length / this.uptimeHistory.length) * 100 : 100;
+
+    const totalMonitoringTime = this.startTime ? (now - this.startTime) / 1000 / 60 : 0; // minutes
+
+    // Calculate recovery rate
+    const recoveryRate = this.totalRecoveries > 0 ?
+      (this.successfulRecoveries / this.totalRecoveries) * 100 : 100;
+
+    // Get component health summary
+    const componentHealth = {};
+    if (this.lastCheckResults) {
+      this.lastCheckResults.forEach(result => {
+        componentHealth[result.component] = {
+          healthy: result.isHealthy,
+          responseTime: result.responseTime,
+          lastError: result.error,
+          consecutiveFailures: this.consecutiveFailures.get(result.component) || 0
+        };
+      });
+    }
+
+    // Get recent alerts (last 10)
+    const recentAlerts = this.alertHistory.slice(-10).reverse();
+
+    return {
+      // Overall metrics
+      uptimePercentage: Math.round(uptimePercentage * 100) / 100,
+      totalMonitoringTime: Math.round(totalMonitoringTime * 100) / 100,
+      lastCheckTime: this.lastCheckTime,
+
+      // Check statistics
+      totalChecks: this.totalChecks,
+      successfulChecks: this.successfulChecks,
+      failedChecks: this.failedChecks,
+      checkSuccessRate: this.totalChecks > 0 ?
+        Math.round((this.successfulChecks / this.totalChecks) * 100 * 100) / 100 : 100,
+
+      // Recovery statistics
+      totalRecoveries: this.totalRecoveries,
+      successfulRecoveries: this.successfulRecoveries,
+      recoveryRate: Math.round(recoveryRate * 100) / 100,
+      lastRecoveryTime: this.lastRecoveryTime,
+
+      // Component health
+      componentHealth,
+
+      // Recent activity
+      recentAlerts,
+
+      // Current status
+      isMonitoring: this.isMonitoring,
+      overallHealth: this.lastCheckResults ?
+        this.healthChecker.getOverallHealth(this.lastCheckResults) : null,
+
+      // Configuration
+      checkInterval: this.config.checkInterval,
+      autoRecovery: this.config.autoRecovery
     };
   }
 }

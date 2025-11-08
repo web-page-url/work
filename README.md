@@ -70,6 +70,7 @@ CHECK_INTERVAL=30000
 AUTO_RECOVERY=true
 HEALTH_CHECK_TIMEOUT=5000
 RETRY_ATTEMPTS=2
+USE_MOCK_DATABASE=true
 
 # Recovery Configuration
 MAX_RECOVERY_ATTEMPTS=3
@@ -79,6 +80,40 @@ RECOVERY_TIMEOUT=30000
 SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
 EMAIL_ALERT_ADDRESS=alerts@company.com
 WEBHOOK_URL=https://api.company.com/alerts
+
+# Demo Configuration
+USE_MOCK_DATABASE=true  # Use simulated database for demonstrations
+USE_MOCK_VALIDATION=true  # Use simulated validation service for demonstrations
+```
+
+## 🎭 Mock Database for Demonstrations
+
+The system includes a **mock database health check** that simulates real database failures for demonstration purposes. This allows you to see the complete monitoring and recovery system in action without needing a real database.
+
+### Mock Database Behavior
+```javascript
+async checkDatabaseMock() {
+  // Simulate DB health check - 70% chance healthy
+  const isHealthy = Math.random() > 0.3;
+
+  if (!isHealthy) {
+    throw new Error("Database connection failed");
+  }
+  return true;
+}
+```
+
+### What It Demonstrates
+- ✅ **Health check logic** - How the system tests component health
+- ✅ **Failure detection** - Random failures show alert triggering
+- ✅ **Recovery handling** - Auto-recovery attempts and logging
+- ✅ **Alert notifications** - Slack/email alerts when failures occur
+
+### Configuration
+- `USE_MOCK_DATABASE=true` (default) - Use simulated database
+- `USE_MOCK_DATABASE=false` - Use real MongoDB connection
+
+**Perfect for showcasing the complete pipeline monitoring system!**
 ```
 
 ### Running the Application
@@ -413,5 +448,6 @@ For issues and questions:
 ---
 
 **Built with ❤️ for robust publishing pipeline monitoring**
-#   w o r k  
+#   w o r k 
+ 
  
