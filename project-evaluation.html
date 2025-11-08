@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🏆 Project Evaluation - Publishing Pipeline Monitor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,9 +16,10 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
-            color: #333;
+            color: #e6e6e6;
+            line-height: 1.6;
         }
 
         .container {
@@ -30,7 +32,11 @@
         .header {
             text-align: center;
             color: white;
-            padding: 60px 0;
+            padding: 50px 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
         }
 
         .perfect-score {
@@ -65,12 +71,12 @@
 
         /* Score Card */
         .score-card {
-            background: white;
+            background: rgba(255,255,255,0.05);
             border-radius: 20px;
             padding: 40px;
             margin: 40px 0;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
             position: relative;
             overflow: hidden;
         }
@@ -112,20 +118,21 @@
         }
 
         .evaluation-card {
-            background: white;
+            background: rgba(255,255,255,0.05);
             border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
         }
 
         .evaluation-card:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: #667eea;
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
 
         .evaluation-card h3 {
-            color: #2c3e50;
+            color: #667eea;
             font-size: 1.4rem;
             margin-bottom: 20px;
             display: flex;
@@ -179,7 +186,7 @@
         }
 
         .quality-item {
-            background: white;
+            background: rgba(255,255,255,0.05);
             border-radius: 12px;
             padding: 20px;
             text-align: center;
@@ -251,7 +258,7 @@
 
         /* Skills Section */
         .skills-section {
-            background: white;
+            background: rgba(255,255,255,0.05);
             border-radius: 15px;
             padding: 40px;
             margin: 40px 0;
@@ -320,6 +327,160 @@
             margin-bottom: 20px;
         }
 
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(102, 126, 234, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.3);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            height: 60px;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand i {
+            color: #ffd700;
+        }
+
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 0;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: #ffd700;
+        }
+
+        .nav-link.active {
+            background: rgba(255,255,255,0.15);
+            color: #ffd700;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            background: #ffd700;
+        }
+
+        /* Mobile Menu Toggle */
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .navbar-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .quality-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .navbar-nav {
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: rgba(102, 126, 234, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 20px 0;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                border-top: 1px solid rgba(102, 126, 234, 0.3);
+            }
+
+            .navbar-nav.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .navbar-toggle {
+                display: flex;
+            }
+
+            .navbar-toggle.active span:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .navbar-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .navbar-toggle.active span:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+        }
+
+        /* Adjust body padding for fixed navbar */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 100px 20px 20px 20px;
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -361,6 +522,50 @@
     </style>
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="dashboard.html" class="navbar-brand">
+                <i class="fas fa-rocket"></i>
+                Pipeline Monitor
+            </a>
+
+            <div class="navbar-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <ul class="navbar-nav" id="navbar-nav">
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="technical-architecture.html" class="nav-link">
+                        <i class="fas fa-cogs"></i> Architecture
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="system-metrics-details.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i> Metrics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="alerts-implementation.html" class="nav-link">
+                        <i class="fas fa-bell"></i> Alerts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="project-evaluation.html" class="nav-link active">
+                        <i class="fas fa-award"></i> Evaluation
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -410,8 +615,8 @@
         </div>
 
         <!-- Quality Assessment -->
-        <div style="background: white; border-radius: 15px; padding: 40px; margin: 40px 0;">
-            <h3 style="color: #2c3e50; text-align: center; font-size: 1.8rem; margin-bottom: 30px;">
+        <div style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 40px; margin: 40px 0; border: 1px solid rgba(102, 126, 234, 0.3);">
+            <h3 style="color: #667eea; text-align: center; font-size: 1.8rem; margin-bottom: 30px;">
                 <i class="fas fa-award" style="color: #ffc107; margin-right: 10px;"></i>
                 QUALITY ASSESSMENT
             </h3>
@@ -595,5 +800,28 @@
             <p>This comprehensive evaluation demonstrates enterprise-grade software development skills and attention to detail.</p>
         </div>
     </div>
+
+    <script>
+        // Mobile menu toggle function
+        function toggleMenu() {
+            const navbarNav = document.getElementById('navbar-nav');
+            const navbarToggle = document.querySelector('.navbar-toggle');
+
+            navbarNav.classList.toggle('active');
+            navbarToggle.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navbar = document.querySelector('.navbar');
+            const navbarNav = document.getElementById('navbar-nav');
+            const navbarToggle = document.querySelector('.navbar-toggle');
+
+            if (!navbar.contains(event.target)) {
+                navbarNav.classList.remove('active');
+                navbarToggle.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>

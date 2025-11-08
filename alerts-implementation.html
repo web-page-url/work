@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📢 Slack/Email Alerts Implementation - Publishing Pipeline Monitor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,10 +16,10 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
+            color: #e6e6e6;
+            line-height: 1.6;
         }
 
         .container {
@@ -31,14 +32,27 @@
         .header {
             text-align: center;
             color: white;
-            padding: 60px 0;
+            padding: 50px 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
         }
 
         .header h1 {
-            font-size: 2.8rem;
+            font-size: 3rem;
             font-weight: 700;
             margin-bottom: 15px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .header p {
@@ -55,11 +69,11 @@
 
         /* Section Styles */
         .section {
-            background: white;
-            margin-bottom: 30px;
+            background: rgba(255,255,255,0.03);
+            margin-bottom: 25px;
             border-radius: 15px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .section-header {
@@ -94,11 +108,12 @@
         }
 
         .file-card {
-            background: #f8f9fa;
+            background: rgba(255,255,255,0.05);
             border-radius: 10px;
             padding: 25px;
             border-left: 4px solid #667eea;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s ease;
         }
 
         .file-card:hover {
@@ -116,7 +131,7 @@
         }
 
         .file-card .location {
-            color: #666;
+            color: #ccc;
             font-size: 0.9rem;
             margin-bottom: 15px;
             font-style: italic;
@@ -131,6 +146,7 @@
             margin-bottom: 8px;
             padding-left: 20px;
             position: relative;
+            color: #e6e6e6;
         }
 
         .file-card li::before {
@@ -205,20 +221,21 @@
 
         /* Configuration Section */
         .config-section {
-            background: #f8f9fa;
+            background: rgba(255,255,255,0.05);
             border-radius: 10px;
             padding: 25px;
             margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.3);
         }
 
         .config-section h4 {
-            color: #2c3e50;
+            color: #667eea;
             margin-bottom: 15px;
             font-size: 1.1rem;
         }
 
         .config-item {
-            background: white;
+            background: rgba(255,255,255,0.05);
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 10px;
@@ -231,7 +248,7 @@
         }
 
         .config-item .value {
-            color: #666;
+            color: #ccc;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.9rem;
         }
@@ -257,21 +274,22 @@
         }
 
         .method-item {
-            background: #f0f4f8;
+            background: rgba(255,255,255,0.05);
             padding: 15px;
             border-radius: 8px;
             border-left: 3px solid #3182ce;
+            border: 1px solid rgba(49, 130, 206, 0.3);
         }
 
         .method-item .method-name {
             font-family: 'JetBrains Mono', monospace;
             font-weight: 600;
-            color: #3182ce;
+            color: #4ecdc4;
             margin-bottom: 5px;
         }
 
         .method-item .description {
-            color: #666;
+            color: #ccc;
             font-size: 0.9rem;
         }
 
@@ -283,7 +301,105 @@
             opacity: 0.8;
         }
 
-        /* Responsive */
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(102, 126, 234, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.3);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            height: 60px;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand i {
+            color: #ffd700;
+        }
+
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 0;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: #ffd700;
+        }
+
+        .nav-link.active {
+            background: rgba(255,255,255,0.15);
+            color: #ffd700;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            background: #ffd700;
+        }
+
+        /* Mobile Menu Toggle */
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .navbar-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
             .file-grid {
                 grid-template-columns: 1fr;
@@ -304,10 +420,99 @@
             .section-content {
                 padding: 20px;
             }
+
+            .navbar-nav {
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: rgba(102, 126, 234, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 20px 0;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                border-top: 1px solid rgba(102, 126, 234, 0.3);
+            }
+
+            .navbar-nav.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .navbar-toggle {
+                display: flex;
+            }
+
+            .navbar-toggle.active span:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .navbar-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .navbar-toggle.active span:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+        }
+
+        /* Adjust body padding for fixed navbar */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 20px 20px;
         }
     </style>
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="dashboard.html" class="navbar-brand">
+                <i class="fas fa-rocket"></i>
+                Pipeline Monitor
+            </a>
+
+            <div class="navbar-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <ul class="navbar-nav" id="navbar-nav">
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="technical-architecture.html" class="nav-link">
+                        <i class="fas fa-cogs"></i> Architecture
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="system-metrics-details.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i> Metrics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="alerts-implementation.html" class="nav-link active">
+                        <i class="fas fa-bell"></i> Alerts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="project-evaluation.html" class="nav-link">
+                        <i class="fas fa-award"></i> Evaluation
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -403,7 +608,7 @@
                 <h2>Slack Message Format Implementation</h2>
             </div>
             <div class="section-content">
-                <h3 style="color: #2c3e50; margin-bottom: 20px;">How Slack Messages Are Formatted</h3>
+                <h3 style="color: #667eea; margin-bottom: 20px;">How Slack Messages Are Formatted</h3>
 
                 <div class="code-block">
 // Lines 135-147 in alertService.js
@@ -436,7 +641,7 @@ const slackMessage = {
                 <h2>Alert Trigger Points</h2>
             </div>
             <div class="section-content">
-                <h3 style="color: #2c3e50; margin-bottom: 20px;">Where Alerts Are Fired</h3>
+                <h3 style="color: #667eea; margin-bottom: 20px;">Where Alerts Are Fired</h3>
 
                 <h4 style="color: #e74c3c; margin: 25px 0 15px 0;">🚨 Component Failure Alerts</h4>
                 <div class="code-block">
@@ -479,7 +684,7 @@ await this.alertService.<span class="function">sendAlert</span>(
                 <h2>Configuration Setup</h2>
             </div>
             <div class="section-content">
-                <h3 style="color: #2c3e50; margin-bottom: 20px;">Environment-Based Alert Configuration</h3>
+                <h3 style="color: #667eea; margin-bottom: 20px;">Environment-Based Alert Configuration</h3>
 
                 <div class="config-section">
                     <h4>📁 src/index.js - Alert Setup Code</h4>
@@ -537,7 +742,7 @@ if (process.env.WEBHOOK_URL) {
                 <h2>Complete Alert Flow</h2>
             </div>
             <div class="section-content">
-                <h3 style="color: #2c3e50; margin-bottom: 20px;">End-to-End Alert Processing</h3>
+                <h3 style="color: #667eea; margin-bottom: 20px;">End-to-End Alert Processing</h3>
 
                 <div class="flow-diagram">
                     <h3>🚀 Alert Journey from Detection to Delivery</h3>
@@ -575,7 +780,7 @@ if (process.env.WEBHOOK_URL) {
                 <h2>Key Methods & Functions</h2>
             </div>
             <div class="section-content">
-                <h3 style="color: #2c3e50; margin-bottom: 20px;">Core Alert Service Methods</h3>
+                <h3 style="color: #667eea; margin-bottom: 20px;">Core Alert Service Methods</h3>
 
                 <div class="methods-grid">
                     <div class="method-item">
@@ -628,14 +833,14 @@ if (process.env.WEBHOOK_URL) {
                 <h2>Alert Delivery Tracking</h2>
             </div>
             <div class="section-content">
-                <h3 style="color: #2c3e50; margin-bottom: 20px;">Audit Logs - Complete Alert History</h3>
+                <h3 style="color: #667eea; margin-bottom: 20px;">Audit Logs - Complete Alert History</h3>
 
-                <p style="margin-bottom: 20px; color: #666;">
+                <p style="margin-bottom: 20px; color: #ccc;">
                     Every alert attempt is logged to <code>logs/audit.log</code> with detailed information about delivery status,
                     timing, and any errors encountered.
                 </p>
 
-                <h4 style="color: #2c3e50; margin: 25px 0 15px 0;">📊 Sample Alert Log Entry</h4>
+                <h4 style="color: #667eea; margin: 25px 0 15px 0;">📊 Sample Alert Log Entry</h4>
 
                 <div class="log-example">
 {
@@ -655,8 +860,8 @@ if (process.env.WEBHOOK_URL) {
 }
 </div>
 
-                <p style="margin-top: 20px; color: #666;">
-                    <strong>Key fields tracked:</strong> timestamp, alert type, destination, delivery status,
+                <p style="margin-top: 20px; color: #ccc;">
+                    <strong style="color: #667eea;">Key fields tracked:</strong> timestamp, alert type, destination, delivery status,
                     component affected, error details, severity level, and performance metrics.
                 </p>
             </div>
@@ -669,12 +874,12 @@ if (process.env.WEBHOOK_URL) {
                 <h2>Implementation Features</h2>
             </div>
             <div class="section-content">
-                <h3 style="color: #2c3e50; margin-bottom: 20px;">🚀 Production-Ready Alert System</h3>
+                <h3 style="color: #667eea; margin-bottom: 20px;">🚀 Production-Ready Alert System</h3>
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #28a745;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border-left: 4px solid #28a745; border: 1px solid rgba(40, 167, 69, 0.3);">
                         <h4 style="color: #28a745; margin-bottom: 10px;"><i class="fas fa-route"></i> Multiple Channels</h4>
-                        <ul style="color: #666; margin: 0;">
+                        <ul style="color: #ccc; margin: 0;">
                             <li>Slack notifications with rich formatting</li>
                             <li>Email alerts (extensible)</li>
                             <li>Custom webhooks for integrations</li>
@@ -682,9 +887,9 @@ if (process.env.WEBHOOK_URL) {
                         </ul>
                     </div>
 
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #007bff;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border-left: 4px solid #007bff; border: 1px solid rgba(0, 123, 255, 0.3);">
                         <h4 style="color: #007bff; margin-bottom: 10px;"><i class="fas fa-redo"></i> Retry Logic</h4>
-                        <ul style="color: #666; margin: 0;">
+                        <ul style="color: #ccc; margin: 0;">
                             <li>Configurable retry attempts</li>
                             <li>Multiple retry strategies</li>
                             <li>Exponential backoff support</li>
@@ -692,9 +897,9 @@ if (process.env.WEBHOOK_URL) {
                         </ul>
                     </div>
 
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #6f42c1;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border-left: 4px solid #6f42c1; border: 1px solid rgba(111, 66, 193, 0.3);">
                         <h4 style="color: #6f42c1; margin-bottom: 10px;"><i class="fas fa-shield-alt"></i> Error Handling</h4>
-                        <ul style="color: #666; margin: 0;">
+                        <ul style="color: #ccc; margin: 0;">
                             <li>Comprehensive error logging</li>
                             <li>Graceful failure handling</li>
                             <li>Detailed audit trails</li>
@@ -702,9 +907,9 @@ if (process.env.WEBHOOK_URL) {
                         </ul>
                     </div>
 
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #fd7e14;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border-left: 4px solid #fd7e14; border: 1px solid rgba(253, 126, 20, 0.3);">
                         <h4 style="color: #fd7e14; margin-bottom: 10px;"><i class="fas fa-layer-group"></i> Severity Levels</h4>
-                        <ul style="color: #666; margin: 0;">
+                        <ul style="color: #ccc; margin: 0;">
                             <li>LOW - Informational alerts</li>
                             <li>MEDIUM - Minor issues</li>
                             <li>HIGH - Significant problems</li>
@@ -727,5 +932,28 @@ if (process.env.WEBHOOK_URL) {
             </div>
         </div>
     </div>
+
+    <script>
+        // Mobile menu toggle function
+        function toggleMenu() {
+            const navbarNav = document.getElementById('navbar-nav');
+            const navbarToggle = document.querySelector('.navbar-toggle');
+
+            navbarNav.classList.toggle('active');
+            navbarToggle.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navbar = document.querySelector('.navbar');
+            const navbarNav = document.getElementById('navbar-nav');
+            const navbarToggle = document.querySelector('.navbar-toggle');
+
+            if (!navbar.contains(event.target)) {
+                navbarNav.classList.remove('active');
+                navbarToggle.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
