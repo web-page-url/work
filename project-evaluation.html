@@ -194,7 +194,7 @@
         }
 
         .quality-item h4 {
-            color: #2c3e50;
+            color: #e6e6e6;
             margin-bottom: 10px;
             font-size: 1.1rem;
         }
@@ -206,7 +206,7 @@
         }
 
         .quality-desc {
-            color: #666;
+            color: #ccc;
             font-size: 0.9rem;
             line-height: 1.4;
         }
@@ -265,7 +265,7 @@
         }
 
         .skills-section h3 {
-            color: #2c3e50;
+            color: #e6e6e6;
             text-align: center;
             font-size: 1.8rem;
             margin-bottom: 30px;
@@ -278,16 +278,18 @@
         }
 
         .skill-item {
-            background: #f8f9fa;
+            background: rgba(255,255,255,0.05);
             padding: 20px;
             border-radius: 10px;
             border-left: 4px solid #667eea;
             transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.3);
         }
 
         .skill-item:hover {
-            background: #e9ecef;
+            background: rgba(255,255,255,0.08);
             transform: translateX(5px);
+            border-color: #667eea;
         }
 
         .skill-item .icon {
@@ -297,7 +299,11 @@
         }
 
         .skill-item strong {
-            color: #2c3e50;
+            color: #e6e6e6;
+        }
+
+        .skill-item p {
+            color: #ccc;
         }
 
         /* Final Verdict */
@@ -489,6 +495,19 @@
             opacity: 0.8;
         }
 
+        /* Ensure all text in skills section is visible */
+        .skills-section *, .skill-item *, .skill-item {
+            color: inherit !important;
+        }
+
+        .skills-section h3, .skills-section strong {
+            color: #e6e6e6 !important;
+        }
+
+        .skills-section p {
+            color: #ccc !important;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .evaluation-grid {
@@ -544,7 +563,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="pipeline-monitor.html" class="nav-link">
-                        <i class="fas fa-stethoscope"></i> Monitor
+                        <i class="fas fa-stethoscope"></i> Monitor Docs
                     </a>
                 </li>
                 <li class="nav-item">
@@ -782,7 +801,7 @@
             <div class="score">PERFECT SCORE: 100/100</div>
 
             <p style="margin-top: 20px; opacity: 0.9;">
-                This project would impress any technical reviewer and showcases advanced skills in system design, API development, monitoring, and production-ready software engineering.
+                This comprehensive project demonstrates expertise in full-stack development, system architecture, API design, monitoring solutions, and enterprise-grade software engineering practices.
             </p>
 
             <div style="margin-top: 30px;">
@@ -796,8 +815,8 @@
 
         <!-- Footer -->
         <div class="footer">
-            <h4>🚀 Ready to Impress Reviewers!</h4>
-            <p>This comprehensive evaluation demonstrates enterprise-grade software development skills and attention to detail.</p>
+            <h4>👨‍💻 Created by Anubhav</h4>
+            <p>Publishing Pipeline Monitor - Enterprise-grade monitoring solution</p>
         </div>
     </div>
 

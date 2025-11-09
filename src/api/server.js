@@ -32,6 +32,9 @@ class PipelineMonitorServer {
       this.app.use(cors());
     }
 
+    // Static file serving for dashboard and documentation
+    this.app.use(express.static('.'));
+
     // Body parsing
     this.app.use(express.json({ limit: '10mb' }));
     this.app.use(express.urlencoded({ extended: true }));

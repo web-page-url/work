@@ -99,11 +99,12 @@ function openDashboard() {
 
   log('\n🎉 DASHBOARD IS READY!', 'green');
   log('=' .repeat(50), 'cyan');
-  log(`📂 Open this file in your browser:`, 'bright');
-  log(`   ${DASHBOARD_FILE}`, 'cyan');
+  log('🌐 Opening dashboard in your browser...', 'bright');
+  log(`   http://localhost:${SERVER_PORT}/dashboard.html`, 'cyan');
   log('');
-  log('🌐 Or visit the API directly:', 'bright');
-  log(`   http://localhost:${SERVER_PORT}/api/v1/pipeline/status`, 'cyan');
+  log('🔗 Alternative URLs:', 'bright');
+  log(`   Main Dashboard: http://localhost:${SERVER_PORT}/dashboard.html`, 'cyan');
+  log(`   API Status: http://localhost:${SERVER_PORT}/api/v1/pipeline/status`, 'cyan');
   log('');
   log('✨ Dashboard Features:', 'yellow');
   log('   • Live status updates every 30 seconds');
@@ -119,13 +120,13 @@ function openDashboard() {
   log('');
   log('💡 Press Ctrl+C to stop the server', 'gray');
 
-  // Try to open the dashboard file automatically
+  // Try to open the dashboard URL automatically
   const open = require('open');
   try {
-    open(DASHBOARD_FILE);
-    log('📖 Dashboard opened in your default browser!', 'green');
+    open(`http://localhost:${SERVER_PORT}/dashboard.html`);
+    log('🌐 Dashboard opened in your default browser!', 'green');
   } catch (err) {
-    log('ℹ️  Please manually open dashboard.html in your browser', 'yellow');
+    log('ℹ️  Please manually open: http://localhost:3000/dashboard.html in your browser', 'yellow');
   }
 }
 
