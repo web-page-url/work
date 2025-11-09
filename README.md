@@ -1,14 +1,16 @@
 # 🚀 Publishing Pipeline Monitor
 
-<div align="center">
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-18+-green.svg" alt="Node.js">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
+  <img src="https://img.shields.io/badge/Tests-47%20Passing-brightgreen.svg" alt="Tests">
+</p>
+
+## 📋 Overview
 
 **Enterprise-Grade Monitoring & Recovery System**
 
 *Built with Node.js for robust publishing pipeline management*
-
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/Tests-47%20Passing-brightgreen.svg)](https://github.com/anubhav/publishing-pipeline-monitor)
 
 ---
 
@@ -24,7 +26,7 @@ Imagine your company's article publishing system. This software acts like a **sm
 
 ---
 
-</div>
+
 
 ## 🎯 Key Features
 
@@ -532,8 +534,6 @@ copies of the Software...
 
 ---
 
-<div align="center">
-
 ## 🎉 **Ready to Get Started?**
 
 ```bash
@@ -551,12 +551,8 @@ npm run dashboard
 
 ---
 
-**🏆 Built with ❤️ for enterprise-grade publishing pipeline monitoring**
-
-*Making systems reliable, one health check at a time.*
-
-**👨‍💻 Created by Anubhav**
-
-</div>
- 
- 
+<p align="center">
+  <strong>🏆 Built with ❤️ for enterprise-grade publishing pipeline monitoring</strong><br><br>
+  <em>Making systems reliable, one health check at a time.</em><br><br>
+  <strong>👨‍💻 Created by Anubhav</strong>
+</p>
