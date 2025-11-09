@@ -537,17 +537,21 @@ copies of the Software...
 ## 🎉 **Ready to Get Started?**
 
 ```bash
-# Clone the project
-git clone https://github.com/anubhav/publishing-pipeline-monitor.git
-cd publishing-pipeline-monitor
+# Clone the repository
+git clone https://github.com/web-page-url/work.git
+cd work
 
-# Quick demo setup
-cp .env.example .env
+# Install dependencies
 npm install
-npm run dashboard
+
+# Start the monitoring system
+npm run start
+
+# Open dashboard.html to see live monitoring
+# Visit: http://localhost:3000/dashboard.html
 ```
 
-**Visit: http://localhost:3000/dashboard.html**
+**🌟 The dashboard provides real-time monitoring of your publishing pipeline components!**
 
 ---
 
