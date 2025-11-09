@@ -26,6 +26,27 @@ Imagine your company's article publishing system. This software acts like a **sm
 
 ---
 
+## 🎉 **Ready to Get Started?**
+
+```bash
+# Clone the repository
+git clone https://github.com/web-page-url/work.git
+cd work
+
+# Install dependencies
+npm install
+
+# Start the monitoring system
+npm run start
+
+# Open dashboard.html to see live monitoring
+# Visit: http://localhost:3000/dashboard.html
+```
+
+**🌟 The dashboard provides real-time monitoring of your publishing pipeline components!**
+
+---
+
 
 
 ## 🎯 Key Features
