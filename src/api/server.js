@@ -163,15 +163,21 @@ class PipelineMonitorServer {
         });
       }
 
+      // Map 'validation' to 'validation-service' for API convenience
+      const componentMapping = {
+        'validation': 'validation-service'
+      };
+      const mappedComponent = componentMapping[component] || component;
+
       const validComponents = ['network', 'validation-service', 'database'];
-      if (!validComponents.includes(component)) {
+      if (!validComponents.includes(mappedComponent)) {
         return res.status(400).json({
           error: 'Invalid component',
           validComponents
         });
       }
 
-      const result = await this.monitor.manualRecovery(component, checkId);
+      const result = await this.monitor.manualRecovery(mappedComponent, checkId);
 
       res.json({
         success: true,

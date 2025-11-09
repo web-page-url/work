@@ -623,6 +623,15 @@
         .section {
             animation: fadeInUp 0.6s ease-out;
         }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            opacity: 0.8;
+            margin-top: 40px;
+        }
     </style>
 </head>
 <body>
@@ -807,16 +816,44 @@
                 The code is organized like a toolbox with different tools for different jobs:
             </p>
 
-            <div class="code-structure">
+            <!-- <div class="code-structure">
 📁 src/<br>
+├── 📁 api/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Web server and API endpoints</span><br>
+│ &nbsp;&nbsp; └── server.js &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Express.js server setup and routes</span><br>
 ├── 📁 core/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">The main "brain" (PublishingPipelineMonitor)</span><br>
+│ &nbsp;&nbsp; └── publishingPipelineMonitor.js &nbsp;&nbsp;# <span class="comment">Main monitoring controller</span><br>
 ├── 📁 services/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Special tools for specific jobs</span><br>
 │ &nbsp;&nbsp; ├── healthChecker.js &nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Tests if things are working</span><br>
 │ &nbsp;&nbsp; ├── recoveryService.js &nbsp;&nbsp;# <span class="comment">Fixes broken things</span><br>
 │ &nbsp;&nbsp; └── alertService.js &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Sends notifications</span><br>
-├── 📁 api/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">The "control panel" (web server)</span><br>
 ├── 📁 utils/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Helper tools (logging, etc.)</span><br>
-└── 📁 types/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Definitions (what things should look like)</span>
+│ &nbsp;&nbsp; └── logger.js &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Logging utility for audit trail</span><br>
+└── 📁 types/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Definitions (what things should look like)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;└── index.js &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Type definitions and interfaces</span>
+            </div> -->
+
+            <div style="margin-top: 30px; background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 10px; border: 1px solid rgba(102, 126, 234, 0.3);">
+                <h3 style="color: #667eea; margin-bottom: 15px;"><i class="fas fa-project-diagram"></i> Complete Project Structure</h3>
+                <div class="code-structure">
+📁 project-root/<br>
+├── 📁 src/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Source code directory</span><br>
+│ &nbsp;&nbsp; ├── 📁 api/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">API server implementation</span><br>
+│ &nbsp;&nbsp; ├── 📁 core/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Core monitoring system</span><br>
+│ &nbsp;&nbsp; ├── 📁 services/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Service implementations</span><br>
+│ &nbsp;&nbsp; ├── 📁 utils/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Utility functions</span><br>
+│ &nbsp;&nbsp; ├── 📁 types/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Type definitions</span><br>
+│ &nbsp;&nbsp; └── index.js &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Main application entry point</span><br>
+├── 📁 tests/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Test files</span><br>
+│ &nbsp;&nbsp; ├── 📁 unit/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Unit tests</span><br>
+│ &nbsp;&nbsp; └── 📁 integration/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Integration tests</span><br>
+├── 📁 logs/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Log files directory</span><br>
+├── 📁 scripts/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Supporting scripts</span><br>
+├── 📁 docs/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Documentation files</span><br>
+├── package.json &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Project metadata and dependencies</span><br>
+├── jest.config.js &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Jest testing configuration</span><br>
+├── .env &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Environment variables</span><br>
+└── README.md &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# <span class="comment">Project documentation</span>
+                </div>
             </div>
         </div>
     </section>
@@ -896,17 +933,38 @@
 
             <div class="usage-commands">
                 <div class="command">
-                    <strong>npm start</strong> - Start it
+                    <strong>npm start</strong> - Start the monitoring system
                 </div>
                 <div class="command">
-                    <strong>Visit http://localhost:3000/api/v1/pipeline/status</strong> - Check status
+                    <strong>Visit http://localhost:3000/api/v1/pipeline/status</strong> - Check current status
                 </div>
                 <div class="command">
-                    <strong>POST /api/v1/pipeline/recovery/database</strong> - Manual fix
+                    <strong>POST /api/v1/pipeline/recovery/database</strong> - Manual database recovery
+                </div>
+                <div class="command">
+                    <strong>POST /api/v1/pipeline/recovery/validation</strong> - Manual validation service recovery
+                </div>
+                <div class="command">
+                    <strong>POST /api/v1/pipeline/recovery/network</strong> - Manual network recovery
+                </div>
+                <div class="command">
+                    <strong>npm test</strong> - Run all tests
                 </div>
                 <div class="command">
                     <strong>Check logs/audit.log</strong> - Read logs for what happened
                 </div>
+            </div>
+
+            <div class="card" style="max-width: 800px; margin: 30px auto; padding: 25px;">
+                <h3 style="color: #e6e6e6; margin-bottom: 15px;"><i class="fas fa-info-circle"></i> Implementation Details</h3>
+                <p style="color: #ccc; margin-bottom: 15px;">The system is built with Node.js and uses the following key technologies:</p>
+                <ul style="color: #ccc; margin-left: 20px; margin-bottom: 15px;">
+                    <li>Express.js for the web server API</li>
+                    <li>Jest for unit and integration testing</li>
+                    <li>Custom-built monitoring and recovery algorithms</li>
+                    <li>Event-driven architecture for real-time monitoring</li>
+                </ul>
+                <p style="color: #ccc;">All components are designed to be modular and replaceable, making the system highly maintainable and extensible.</p>
             </div>
         </div>
     </section>
@@ -953,37 +1011,14 @@
                 <i class="fas fa-tools"></i> <i class="fas fa-magic"></i> <i class="fas fa-shield-alt"></i>
             </div>
             <h2>This system turns reactive "fix when broken" into proactive "prevent and auto-fix" monitoring!</h2>
-            <p>Transform your publishing pipeline with intelligent monitoring and automatic recovery.</p>
+            <p>Enterprise-grade monitoring solution with intelligent health checks, automated recovery, and comprehensive logging.</p>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer style="text-align: center; padding: 40px 0; color: white; opacity: 0.8; margin-top: 40px;">
+    <div class="footer">
         <h4>👨‍💻 Created by Anubhav</h4>
         <p>Publishing Pipeline Monitor - Enterprise-grade monitoring solution</p>
-    </footer>
-
-    <script>
-        // Mobile menu toggle function
-        function toggleMenu() {
-            const navbarNav = document.getElementById('navbar-nav');
-            const navbarToggle = document.querySelector('.navbar-toggle');
-
-            navbarNav.classList.toggle('active');
-            navbarToggle.classList.toggle('active');
-        }
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const navbar = document.querySelector('.navbar');
-            const navbarNav = document.getElementById('navbar-nav');
-            const navbarToggle = document.querySelector('.navbar-toggle');
-
-            if (!navbar.contains(event.target)) {
-                navbarNav.classList.remove('active');
-                navbarToggle.classList.remove('active');
-            }
-        });
-    </script>
+    </div>
 </body>
 </html>
