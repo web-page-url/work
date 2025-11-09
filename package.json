@@ -4,7 +4,7 @@
   "description": "A robust monitoring and recovery system for EssentiallySports publishing pipeline",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node scripts/start-dashboard.js",
     "dashboard": "node scripts/start-dashboard.js",
     "dev": "nodemon src/index.js",
     "test": "jest",

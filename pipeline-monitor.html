@@ -93,7 +93,7 @@
             font-weight: 600;
             text-align: center;
             margin-bottom: 50px;
-            color: #2c3e50;
+            color: #e6e6e6;
             position: relative;
         }
 
@@ -143,11 +143,11 @@
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 15px;
-            color: #2c3e50;
+            color: #e6e6e6;
         }
 
         .card p {
-            color: #666;
+            color: #e6e6e6;
             line-height: 1.7;
         }
 
@@ -173,12 +173,13 @@
         .timeline-item {
             margin-bottom: 50px;
             position: relative;
-            background: white;
+            background: rgba(255,255,255,0.05);
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             margin-left: 50px;
             width: calc(50% - 40px);
+            border: 1px solid rgba(102, 126, 234, 0.3);
         }
 
         .timeline-item:nth-child(even) {
@@ -208,7 +209,7 @@
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 15px;
-            color: #2c3e50;
+            color: #e6e6e6;
         }
 
         /* Code Structure */
@@ -274,10 +275,11 @@
         .benefit-item {
             text-align: center;
             padding: 30px;
-            background: white;
+            background: rgba(255,255,255,0.05);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.3);
         }
 
         .benefit-item:hover {
@@ -294,7 +296,7 @@
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 10px;
-            color: #2c3e50;
+            color: #e6e6e6;
         }
 
         /* Usage Section */
@@ -326,11 +328,12 @@
         }
 
         .smart-feature {
-            background: white;
+            background: rgba(255,255,255,0.05);
             border-radius: 15px;
             padding: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             border-left: 4px solid #ffd700;
+            border: 1px solid rgba(102, 126, 234, 0.3);
         }
 
         .smart-feature i {
@@ -432,6 +435,39 @@
             }
         }
 
+        /* Ensure all text is visible on dark theme */
+        .section p, .section div, .section span, .section li {
+            color: #e6e6e6 !important;
+        }
+
+        .benefit-item p, .smart-feature p {
+            color: #ccc !important;
+        }
+
+        .timeline-item p, .timeline-item li, .timeline-item ul {
+            color: #e6e6e6 !important;
+        }
+
+        .benefit-item p {
+            color: #ccc !important;
+        }
+
+        /* Override any white backgrounds that might cause visibility issues */
+        .timeline-item, .benefit-item, .smart-feature, .card {
+            background: rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(102, 126, 234, 0.3) !important;
+        }
+
+        /* Fix inline style overrides */
+        [style*="background: #f8f9fa"] {
+            background: rgba(102, 126, 234, 0.1) !important;
+            color: #e6e6e6 !important;
+        }
+
+        [style*="background: rgba(255,255,255,0.2)"] {
+            background: rgba(102, 126, 234, 0.2) !important;
+        }
+
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -491,7 +527,7 @@
                 <i class="fas fa-shield-alt card-icon"></i>
                 <h3>24/7 Monitoring</h3>
                 <p>This system <strong>watches these 3 parts 24/7</strong>, like a security guard. When something breaks, it:</p>
-                <ul style="color: #666; margin-top: 15px;">
+                <ul style="color: #e6e6e6; margin-top: 15px;">
                     <li>📢 <strong>Tells people</strong> about the problem (sends alerts)</li>
                     <li>🔧 <strong>Tries to fix it automatically</strong></li>
                     <li>📝 <strong>Writes down everything</strong> that happened (for later review)</li>
@@ -509,7 +545,7 @@
                 <div class="timeline-item">
                     <h4>1. The "Check-Up" Process</h4>
                     <p><strong>Every 30 seconds</strong>, the system does a "health check":</p>
-                    <ul style="margin-top: 10px;">
+                    <ul style="margin-top: 10px; color: #e6e6e6;">
                         <li>🌐 Tests if the internet connection works</li>
                         <li>🤖 Asks the validation service "Are you OK?"</li>
                         <li>💾 Tries to connect to the database</li>
@@ -524,10 +560,10 @@
                     <h4>2. When Something Breaks (The Alert System)</h4>
                     <p><strong>Example:</strong> Database stops working.</p>
                     <p>The system:</p>
-                    <ul style="margin-top: 10px;">
+                    <ul style="margin-top: 10px; color: #e6e6e6;">
                         <li>📝 <strong>Logs the problem:</strong> "Database is down at 3:15 PM"</li>
                         <li>📧 <strong>Sends alerts:</strong></li>
-                        <ul>
+                        <ul style="color: #e6e6e6;">
                             <li>Email to IT team: "Database broken!"</li>
                             <li>Slack message to engineers: "🚨 Database down - fix needed!"</li>
                             <li>Can also send to other systems via webhooks</li>
@@ -540,25 +576,25 @@
                     <p>The system tries to fix problems automatically:</p>
 
                     <div style="display: grid; gap: 15px; margin-top: 15px;">
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
-                            <strong>🔧 For Network Problems:</strong>
-                            <ul style="margin-top: 5px;">
+                        <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(102, 126, 234, 0.3);">
+                            <strong style="color: #667eea;">🔧 For Network Problems:</strong>
+                            <ul style="margin-top: 5px; color: #e6e6e6;">
                                 <li>Clears the DNS cache (like restarting your internet connection)</li>
                                 <li>If that doesn't work, tells humans what to do</li>
                             </ul>
                         </div>
 
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
-                            <strong>🔄 For Validation Service Problems:</strong>
-                            <ul style="margin-top: 5px;">
+                        <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(102, 126, 234, 0.3);">
+                            <strong style="color: #667eea;">🔄 For Validation Service Problems:</strong>
+                            <ul style="margin-top: 5px; color: #e6e6e6;">
                                 <li>Calls a special "restart" API on the service</li>
                                 <li>If that fails, tells humans to restart the service</li>
                             </ul>
                         </div>
 
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
-                            <strong>💾 For Database Problems:</strong>
-                            <ul style="margin-top: 5px;">
+                        <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(102, 126, 234, 0.3);">
+                            <strong style="color: #667eea;">💾 For Database Problems:</strong>
+                            <ul style="margin-top: 5px; color: #e6e6e6;">
                                 <li>Disconnects and reconnects to the database</li>
                                 <li>If that fails, tells humans to check the database server</li>
                             </ul>
@@ -569,7 +605,7 @@
                 <div class="timeline-item">
                     <h4>4. The Brain (The Main Controller)</h4>
                     <p>There's a main "brain" called <strong>PublishingPipelineMonitor</strong> that:</p>
-                    <ul style="margin-top: 10px;">
+                    <ul style="margin-top: 10px; color: #e6e6e6;">
                         <li>🎯 <strong>Coordinates everything</strong> - tells each part what to do</li>
                         <li>🧠 <strong>Remembers past problems</strong> - "This database failed 3 times today"</li>
                         <li>⚡ <strong>Makes decisions</strong> - "This is urgent, send critical alert"</li>
@@ -627,8 +663,8 @@
                     </div>
                 </div>
 
-                <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px; margin-top: 20px;">
-                    <strong style="color: #ffd700;">✨ Result:</strong> Problem fixed in 3 seconds, team notified, everything logged.
+                <div style="background: rgba(102, 126, 234, 0.2); padding: 20px; border-radius: 10px; margin-top: 20px; border: 1px solid rgba(102, 126, 234, 0.3);">
+                    <strong style="color: #ffd700;">✨ Result:</strong> <span style="color: #e6e6e6;">Problem fixed in 3 seconds, team notified, everything logged.</span>
                 </div>
             </div>
         </div>
